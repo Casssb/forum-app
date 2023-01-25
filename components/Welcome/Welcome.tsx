@@ -1,4 +1,5 @@
 import { Title, Text, Anchor } from '@mantine/core';
+import Image from 'next/image';
 import useStyles from './Welcome.styles';
 
 export function Welcome() {
