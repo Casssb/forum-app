@@ -1,5 +1,4 @@
-import { createStyles, Header, Autocomplete, Group, Burger, Button, Title } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { createStyles, Header, Autocomplete, Group, Button, Title } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React from 'react';
 import Image from 'next/image';
@@ -49,14 +48,12 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Navbar: React.FC = () => {
-  const [opened, { toggle }] = useDisclosure(false);
   const { classes } = useStyles();
 
   return (
     <Header height={56} className={classes.header} mb={120}>
       <div className={classes.inner}>
         <Group>
-          {/* <Burger opened={opened} onClick={toggle} size="sm" /> */}
           <Image src={fredditLogo} alt="white & green frog logo" width={40} height={40} />
           <Title order={2}>Freddit</Title>
           <FeedsMenu />
@@ -69,8 +66,8 @@ const Navbar: React.FC = () => {
         />
         <Group sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Group ml={50} spacing={5} className={classes.links}>
-            <Button>Sign Up</Button>
-            <Button>Log In</Button>
+            <Button color="grape.7">Sign Up</Button>
+            <Button color="green.6">Log In</Button>
           </Group>
           <AccountMenu />
         </Group>

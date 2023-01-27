@@ -16,7 +16,7 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Button>Feeds</Button>
+        <Button color="green.6">Feeds</Button>
       </Menu.Target>
 
       <Menu.Dropdown>
