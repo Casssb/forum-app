@@ -1,4 +1,4 @@
-import { Button, Group } from '@mantine/core';
+import { Button, Group, useMantineColorScheme } from '@mantine/core';
 import React from 'react';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
@@ -6,11 +6,14 @@ import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
 type AuthButtonsProps = {};
 
 const AuthButtons: React.FC<AuthButtonsProps> = () => {
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === 'dark';
   const dispatch = useAppDispatch();
   return (
     <Group spacing={5} display={{ base: 'none', md: 'flex' }}>
       <Button
-        color="grape.7"
+        variant="outline"
+        color={dark ? 'gray' : 'grape.6'}
         onClick={() => {
           dispatch(setModalOpen(true));
           dispatch(setModalView('signup'));
@@ -19,7 +22,8 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
         Sign Up
       </Button>
       <Button
-        color="green.6"
+        variant="filled"
+        color={dark ? 'gray' : 'grape.6'}
         onClick={() => {
           dispatch(setModalOpen(true));
           dispatch(setModalView('login'));

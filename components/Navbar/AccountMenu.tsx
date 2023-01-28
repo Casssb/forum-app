@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button, Text } from '@mantine/core';
+import { Menu, Text, useMantineColorScheme, ActionIcon } from '@mantine/core';
 import {
   IconSettings,
   IconSearch,
@@ -7,16 +7,22 @@ import {
   IconMessageCircle,
   IconTrash,
   IconArrowsLeftRight,
+  IconUser,
 } from '@tabler/icons-react';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
 
 type AccountMenuProps = {};
 
 const AccountMenu: React.FC<AccountMenuProps> = () => {
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === 'dark';
+
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Button>Account</Button>
+        <ActionIcon size="lg" variant="outline" color={dark ? 'gray' : 'dark'}>
+          <IconUser />
+        </ActionIcon>
       </Menu.Target>
 
       <Menu.Dropdown>

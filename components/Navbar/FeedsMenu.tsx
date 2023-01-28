@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button, Text } from '@mantine/core';
+import { Menu, Button, Text, useMantineColorScheme } from '@mantine/core';
 import {
   IconSettings,
   IconSearch,
@@ -7,16 +7,21 @@ import {
   IconMessageCircle,
   IconTrash,
   IconArrowsLeftRight,
+  IconHome2,
 } from '@tabler/icons-react';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
 
 type FeedsMenuProps = {};
 
 const FeedsMenu: React.FC<FeedsMenuProps> = () => {
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === 'dark';
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Button color="green.6">Feeds</Button>
+        <Button leftIcon={<IconHome2 />} variant="outline" color={dark ? 'gray' : 'dark'}>
+          Home
+        </Button>
       </Menu.Target>
 
       <Menu.Dropdown>
