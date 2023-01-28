@@ -4,7 +4,9 @@ import { getCookie, setCookie } from 'cookies-next';
 import Head from 'next/head';
 import { MantineProvider, ColorScheme, ColorSchemeProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { Provider } from 'react-redux';
 import MainLayout from '../components/Layouts/MainLayout';
+import { store } from '../redux/store';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -24,15 +26,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
 
-      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-          <NotificationsProvider>
-            <MainLayout>
-              <Component {...pageProps} />
-            </MainLayout>
-          </NotificationsProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+      <Provider store={store}>
+        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+          <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+            <NotificationsProvider>
+              <MainLayout>
+                <Component {...pageProps} />
+              </MainLayout>
+            </NotificationsProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </Provider>
     </>
   );
 }

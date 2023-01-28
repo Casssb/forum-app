@@ -1,10 +1,12 @@
-import { createStyles, Header, Autocomplete, Group, Button, Title } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { createStyles, Header, Group, Title } from '@mantine/core';
 import React from 'react';
 import Image from 'next/image';
 import AccountMenu from './AccountMenu';
 import FeedsMenu from './FeedsMenu';
 import fredditLogo from '../../public/freddit-logo.png';
+import AuthButtons from './AuthButtons';
+import Search from './Search';
+import AuthModal from '../AuthModal/AuthModal';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -18,33 +20,6 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-
-  links: {
-    [theme.fn.smallerThan('md')]: {
-      display: 'none',
-    },
-  },
-
-  search: {
-    [theme.fn.smallerThan('xs')]: {
-      display: 'none',
-    },
-  },
-
-  link: {
-    display: 'block',
-    lineHeight: 1,
-    padding: '8px 12px',
-    borderRadius: theme.radius.sm,
-    textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    fontSize: theme.fontSizes.sm,
-    fontWeight: 500,
-
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    },
-  },
 }));
 
 const Navbar: React.FC = () => {
@@ -55,22 +30,17 @@ const Navbar: React.FC = () => {
       <div className={classes.inner}>
         <Group>
           <Image src={fredditLogo} alt="white & green frog logo" width={40} height={40} />
-          <Title order={2}>Freddit</Title>
+          <Title order={2} display={{ base: 'none', md: 'unset' }}>
+            Freddit
+          </Title>
           <FeedsMenu />
         </Group>
-        <Autocomplete
-          className={classes.search}
-          placeholder="Search"
-          icon={<IconSearch />}
-          data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
-        />
+        <Search />
         <Group sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Group ml={50} spacing={5} className={classes.links}>
-            <Button color="grape.7">Sign Up</Button>
-            <Button color="green.6">Log In</Button>
-          </Group>
+          <AuthButtons />
           <AccountMenu />
         </Group>
+        <AuthModal />
       </div>
     </Header>
   );

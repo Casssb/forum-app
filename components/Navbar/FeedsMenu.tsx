@@ -8,7 +8,7 @@ import {
   IconTrash,
   IconArrowsLeftRight,
 } from '@tabler/icons-react';
-import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
+import { ColorSchemeToggle } from './ColorSchemeToggle';
 
 type FeedsMenuProps = {};
 
@@ -21,9 +21,7 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
 
       <Menu.Dropdown>
         <Menu.Label>Application</Menu.Label>
-        <Menu.Item>
-          <ColorSchemeToggle />
-        </Menu.Item>
+        <ColorSchemeToggle />
         <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
         <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
         <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
