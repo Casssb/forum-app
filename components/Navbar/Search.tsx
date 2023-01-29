@@ -7,7 +7,12 @@ type SearchProps = {};
 const Search: React.FC<SearchProps> = () => {
   return (
     <Flex sx={{ flexGrow: 1 }}>
-      <Input icon={<IconSearch />} placeholder="Search Freddit" w="100%" mx="1rem" />
+      <Input
+        icon={<IconSearch />}
+        placeholder="Search Freddit"
+        w={{ base: 'min-content', xs: '100%' }}
+        mx="1rem"
+      />
     </Flex>
   );
 };

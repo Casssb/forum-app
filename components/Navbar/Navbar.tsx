@@ -1,12 +1,15 @@
 import { createStyles, Header, Group, Title } from '@mantine/core';
 import React from 'react';
 import Image from 'next/image';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import AccountMenu from './AccountMenu';
 import FeedsMenu from './FeedsMenu';
 import fredditLogo from '../../public/freddit-logo.png';
 import AuthButtons from './AuthButtons';
 import Search from './Search';
 import AuthModal from '../AuthModal/AuthModal';
+import { auth } from '../../firebase/firebaseConfig';
+import ActionIcons from './ActionIcons';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -24,6 +27,7 @@ const useStyles = createStyles((theme) => ({
 
 const Navbar: React.FC = () => {
   const { classes } = useStyles();
+  const [user, loading, error] = useAuthState(auth);
 
   return (
     <Header height={56} className={classes.header} mb={120}>
@@ -37,7 +41,7 @@ const Navbar: React.FC = () => {
         </Group>
         <Search />
         <Group sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <AuthButtons />
+          {user ? <ActionIcons /> : <AuthButtons />}
           <AccountMenu />
         </Group>
         <AuthModal />

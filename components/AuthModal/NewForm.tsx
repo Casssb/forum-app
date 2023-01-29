@@ -1,10 +1,15 @@
 import React from 'react';
-import { TextInput, Button, Group, Box, PasswordInput } from '@mantine/core';
+import { TextInput, Button, Group, Box, PasswordInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebaseConfig';
+import { useAppDispatch } from '../../redux/hooks/hooks';
+import { setModalOpen } from '../../redux/slices/authModalSlice';
 
 type NewFormProps = {};
 
 const NewForm: React.FC<NewFormProps> = () => {
+  const dispatch = useAppDispatch();
   const form = useForm({
     initialValues: {
       email: '',
@@ -19,9 +24,14 @@ const NewForm: React.FC<NewFormProps> = () => {
     },
   });
 
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
   const handleSubmit = (email: string, password: string) => {
-    console.log(email, password);
+    createUserWithEmailAndPassword(email, password);
   };
+
+  user && dispatch(setModalOpen(false));
 
   return (
     <Box sx={{ maxWidth: 300 }}>
@@ -47,8 +57,15 @@ const NewForm: React.FC<NewFormProps> = () => {
           {...form.getInputProps('confirmPassword')}
         />
         <Group position="left" mt="md">
-          <Button type="submit">Sign Up</Button>
+          <Button loading={loading} type="submit">
+            Sign Up
+          </Button>
         </Group>
+        {error && (
+          <Text mt="1rem" color="red">
+            {error.message}
+          </Text>
+        )}
       </form>
     </Box>
   );

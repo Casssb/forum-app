@@ -23,11 +23,11 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
     <Menu shadow="md" width={200}>
       <Menu.Target>
         {isMobile ? (
-          <ActionIcon size="lg" variant="outline" color={dark ? 'gray' : 'dark'}>
+          <ActionIcon size="lg" color={dark ? 'gray' : 'dark'}>
             <IconHome2 />
           </ActionIcon>
         ) : (
-          <Button leftIcon={<IconHome2 />} variant="outline" color={dark ? 'gray' : 'dark'}>
+          <Button leftIcon={<IconHome2 />} color={dark ? 'gray' : 'dark'}>
             Home
           </Button>
         )}

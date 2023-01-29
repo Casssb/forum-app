@@ -32,8 +32,7 @@ const AuthModal: React.FC<AuthModalProps> = () => {
             />
           </Box>
           <Box sx={{ flex: '5' }} p="1rem" h={700}>
-            {viewState === 'existing' && <ExistingUser />}
-            {viewState === 'new' && <NewUser />}
+            {viewState === 'existing' ? <ExistingUser /> : <NewUser />}
           </Box>
         </Flex>
       </Modal>
