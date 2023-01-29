@@ -13,7 +13,7 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
     <Group spacing={5} display={{ base: 'none', md: 'flex' }}>
       <Button
         variant="outline"
-        color={dark ? 'gray' : 'grape.6'}
+        color={dark ? 'gray' : 'indigo.6'}
         onClick={() => {
           dispatch(setModalOpen(true));
           dispatch(setModalView('new'));
@@ -23,7 +23,7 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
       </Button>
       <Button
         variant="filled"
-        color={dark ? 'gray' : 'grape.6'}
+        color={dark ? 'gray' : 'indigo.6'}
         onClick={() => {
           dispatch(setModalOpen(true));
           dispatch(setModalView('existing'));

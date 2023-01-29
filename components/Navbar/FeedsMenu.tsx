@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button, Text, useMantineColorScheme } from '@mantine/core';
+import { Menu, Button, Text, useMantineColorScheme, ActionIcon } from '@mantine/core';
 import {
   IconSettings,
   IconSearch,
@@ -9,6 +9,7 @@ import {
   IconArrowsLeftRight,
   IconHome2,
 } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
 
 type FeedsMenuProps = {};
@@ -16,12 +17,20 @@ type FeedsMenuProps = {};
 const FeedsMenu: React.FC<FeedsMenuProps> = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
+  const isMobile = useMediaQuery('(max-width: 600px)');
+
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Button leftIcon={<IconHome2 />} variant="outline" color={dark ? 'gray' : 'dark'}>
-          Home
-        </Button>
+        {isMobile ? (
+          <ActionIcon size="lg" variant="outline" color={dark ? 'gray' : 'dark'}>
+            <IconHome2 />
+          </ActionIcon>
+        ) : (
+          <Button leftIcon={<IconHome2 />} variant="outline" color={dark ? 'gray' : 'dark'}>
+            Home
+          </Button>
+        )}
       </Menu.Target>
 
       <Menu.Dropdown>

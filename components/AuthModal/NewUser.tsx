@@ -1,9 +1,10 @@
-import { ActionIcon, Box, Flex, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Divider, Flex, Text, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import React from 'react';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
 import NewForm from './NewForm';
+import GoogleLogin from './GoogleLogin';
 
 type NewUserProps = {};
 
@@ -29,6 +30,8 @@ const NewUser: React.FC<NewUserProps> = () => {
           </Text>
         </Text>
       </Box>
+      <GoogleLogin />
+      <Divider label="OR" labelPosition="center" />
       <NewForm />
       <Text mt="1rem">
         Already a Fredditor?{' '}

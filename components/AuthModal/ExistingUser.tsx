@@ -1,8 +1,10 @@
-import { ActionIcon, Box, Flex, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Divider, Flex, Text, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import React from 'react';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
+import ExistingForm from './ExistingForm';
+import GoogleLogin from './GoogleLogin';
 
 type ExistingUserProps = {};
 
@@ -28,7 +30,9 @@ const ExistingUser: React.FC<ExistingUserProps> = () => {
           </Text>
         </Text>
       </Box>
-      <ExistingUser />
+      <GoogleLogin />
+      <Divider label="OR" labelPosition="center" />
+      <ExistingForm />
       <Text mt="1rem">
         New to Freddit?{' '}
         <Text

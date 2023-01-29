@@ -18,9 +18,14 @@ const NewForm: React.FC<NewFormProps> = () => {
         value !== values.password ? 'Passwords did not match' : null,
     },
   });
+
+  const handleSubmit = (email: string, password: string) => {
+    console.log(email, password);
+  };
+
   return (
     <Box sx={{ maxWidth: 300 }}>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form onSubmit={form.onSubmit((values) => handleSubmit(values.email, values.password))}>
         <TextInput
           required
           label="Email"
