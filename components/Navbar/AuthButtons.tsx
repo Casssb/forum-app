@@ -16,7 +16,7 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
         color={dark ? 'gray' : 'grape.6'}
         onClick={() => {
           dispatch(setModalOpen(true));
-          dispatch(setModalView('signup'));
+          dispatch(setModalView('new'));
         }}
       >
         Sign Up
@@ -26,7 +26,7 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
         color={dark ? 'gray' : 'grape.6'}
         onClick={() => {
           dispatch(setModalOpen(true));
-          dispatch(setModalView('login'));
+          dispatch(setModalView('existing'));
         }}
       >
         Log In

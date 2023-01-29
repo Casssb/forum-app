@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-type viewStateProps = 'login' | 'signup';
+type viewStateProps = 'new' | 'existing';
 
 interface authModalProps {
   isModalOpen: boolean;
@@ -10,7 +10,7 @@ interface authModalProps {
 
 const initialState: authModalProps = {
   isModalOpen: false,
-  viewState: 'login',
+  viewState: 'new',
 };
 
 export const authModalSlice = createSlice({

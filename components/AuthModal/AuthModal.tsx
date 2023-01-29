@@ -1,7 +1,11 @@
 import React from 'react';
-import { Modal, Title } from '@mantine/core';
+import { Box, Flex, Modal } from '@mantine/core';
+import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks';
 import { setModalOpen } from '../../redux/slices/authModalSlice';
+import ExistingUser from './ExistingUser';
+import NewUser from './NewUser';
+import frogCity from '../../public/frog-city-watercolour3.png';
 
 type AuthModalProps = {};
 
@@ -12,12 +16,26 @@ const AuthModal: React.FC<AuthModalProps> = () => {
   return (
     <>
       <Modal
+        size="auto"
         opened={isModalOpen}
         onClose={() => dispatch(setModalOpen(false))}
-        title="Introduce yourself!"
+        padding={0}
+        withCloseButton={false}
       >
-        {viewState === 'login' && <Title>Log In</Title>}
-        {viewState === 'signup' && <Title>Sign Up</Title>}
+        <Flex>
+          <Box sx={{ flex: '2', position: 'relative' }}>
+            <Image
+              src={frogCity}
+              fill
+              alt="watercolour frog in city"
+              style={{ objectFit: 'cover', objectPosition: 'bottom' }}
+            />
+          </Box>
+          <Box sx={{ flex: '5' }} p="1rem" h={700}>
+            {viewState === 'existing' && <ExistingUser />}
+            {viewState === 'new' && <NewUser />}
+          </Box>
+        </Flex>
       </Modal>
     </>
   );
