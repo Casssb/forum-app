@@ -1,11 +1,26 @@
 import React from 'react';
-import { Menu, useMantineColorScheme, ActionIcon } from '@mantine/core';
-import { IconUser, IconLogin, IconLogout, IconMenu2 } from '@tabler/icons-react';
+import {
+  Menu,
+  useMantineColorScheme,
+  ActionIcon,
+  UnstyledButton,
+  ThemeIcon,
+  Group,
+  Text,
+} from '@mantine/core';
+import {
+  IconUser,
+  IconLogin,
+  IconLogout,
+  IconMenu2,
+  IconChevronDown,
+  IconUserCircle,
+} from '@tabler/icons-react';
 import { signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
 import { useAppDispatch } from '../../redux/hooks/hooks';
-import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
+import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
 import { auth } from '../../firebase/firebaseConfig';
 
 type AccountMenuProps = {};
@@ -20,9 +35,29 @@ const AccountMenu: React.FC<AccountMenuProps> = () => {
     <Menu shadow="md" width={200}>
       <Menu.Target>
         {user ? (
-          <ActionIcon size="lg" variant="gradient" gradient={{ from: 'lime.3', to: 'green.7' }}>
-            <IconUser />
-          </ActionIcon>
+          <UnstyledButton
+            sx={(theme) => ({
+              padding: '0.2rem',
+              color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+
+              '&:hover': {
+                backgroundColor:
+                  theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+              },
+            })}
+          >
+            <Group>
+              <ThemeIcon size="lg" variant="gradient" gradient={{ from: 'lime.3', to: 'green.7' }}>
+                <IconUser />
+              </ThemeIcon>
+              <Text size="sm" weight={500}>
+                {user?.displayName || user.email?.split('@')[0]}
+              </Text>
+              <ThemeIcon size="lg" color="gray">
+                <IconChevronDown />
+              </ThemeIcon>
+            </Group>
+          </UnstyledButton>
         ) : (
           <ActionIcon size="lg" color={dark ? 'gray' : 'dark'}>
             <IconMenu2 />
@@ -31,6 +66,7 @@ const AccountMenu: React.FC<AccountMenuProps> = () => {
       </Menu.Target>
 
       <Menu.Dropdown>
+        {user && <Menu.Item icon={<IconUserCircle size={14} />}>Account</Menu.Item>}
         <ColorSchemeToggle />
         <Menu.Divider />
         {user ? (
@@ -47,8 +83,8 @@ const AccountMenu: React.FC<AccountMenuProps> = () => {
           <Menu.Item
             icon={<IconLogin size={14} />}
             onClick={() => {
-              dispatch(setModalOpen(true));
-              dispatch(setModalView('existing'));
+              dispatch(setAuthModalOpen(true));
+              dispatch(setAuthModalView('existing'));
             }}
           >
             Log In / Sign Up

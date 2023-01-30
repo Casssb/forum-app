@@ -6,7 +6,7 @@ import React from 'react';
 type ActionIconsProps = {};
 
 const ActionIcons: React.FC<ActionIconsProps> = () => {
-  const isMobile = useMediaQuery('(max-width: 600px)');
+  const isMobile = useMediaQuery('(max-width: 700px)');
 
   return (
     <Flex gap="0.2rem">

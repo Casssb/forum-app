@@ -17,15 +17,15 @@ export const authModalSlice = createSlice({
   name: 'authModal',
   initialState,
   reducers: {
-    setModalOpen: (state, action: PayloadAction<boolean>) => {
+    setAuthModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isModalOpen = action.payload;
     },
-    setModalView: (state, action: PayloadAction<viewStateProps>) => {
+    setAuthModalView: (state, action: PayloadAction<viewStateProps>) => {
       state.viewState = action.payload;
     },
   },
 });
 
-export const { setModalOpen, setModalView } = authModalSlice.actions;
+export const { setAuthModalOpen, setAuthModalView } = authModalSlice.actions;
 
 export default authModalSlice.reducer;

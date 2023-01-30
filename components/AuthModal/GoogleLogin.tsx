@@ -4,14 +4,14 @@ import { IconBrandGoogle } from '@tabler/icons-react';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../redux/hooks/hooks';
-import { setModalOpen } from '../../redux/slices/authModalSlice';
+import { setAuthModalOpen } from '../../redux/slices/authModalSlice';
 
 type GoogleLoginProps = {};
 
 const GoogleLogin: React.FC<GoogleLoginProps> = () => {
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
   const dispatch = useAppDispatch();
-  user && dispatch(setModalOpen(false));
+  user && dispatch(setAuthModalOpen(false));
   return (
     <Box my="1rem">
       <Button

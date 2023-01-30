@@ -2,7 +2,7 @@ import { ActionIcon, Box, Divider, Flex, Text, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import React from 'react';
 import { useAppDispatch } from '../../redux/hooks/hooks';
-import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
+import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
 import NewForm from './NewForm';
 import GoogleLogin from './GoogleLogin';
 
@@ -14,7 +14,7 @@ const NewUser: React.FC<NewUserProps> = () => {
     <Flex direction="column">
       <Box display="flex" w="100%" sx={{ justifyContent: 'flex-end' }}>
         <ActionIcon>
-          <IconX onClick={() => dispatch(setModalOpen(false))} />
+          <IconX onClick={() => dispatch(setAuthModalOpen(false))} />
         </ActionIcon>
       </Box>
       <Box w="100%">
@@ -39,7 +39,7 @@ const NewUser: React.FC<NewUserProps> = () => {
           variant="gradient"
           span
           sx={{ cursor: 'pointer' }}
-          onClick={() => dispatch(setModalView('existing'))}
+          onClick={() => dispatch(setAuthModalView('existing'))}
         >
           Log In
         </Text>

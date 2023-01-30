@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../redux/hooks/hooks';
-import { setModalOpen } from '../../redux/slices/authModalSlice';
+import { setAuthModalOpen } from '../../redux/slices/authModalSlice';
 
 type ExistingFormProps = {};
 
@@ -27,7 +27,7 @@ const ExistingForm: React.FC<ExistingFormProps> = () => {
     signInWithEmailAndPassword(email, password);
   };
 
-  user && dispatch(setModalOpen(false));
+  user && dispatch(setAuthModalOpen(false));
 
   return (
     <Box sx={{ maxWidth: 300 }}>

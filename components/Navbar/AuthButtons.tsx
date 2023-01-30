@@ -1,7 +1,7 @@
 import { Button, Group, useMantineColorScheme } from '@mantine/core';
 import React from 'react';
 import { useAppDispatch } from '../../redux/hooks/hooks';
-import { setModalOpen, setModalView } from '../../redux/slices/authModalSlice';
+import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
 
 type AuthButtonsProps = {};
 
@@ -15,8 +15,8 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
         variant="outline"
         color={dark ? 'gray' : 'indigo.6'}
         onClick={() => {
-          dispatch(setModalOpen(true));
-          dispatch(setModalView('new'));
+          dispatch(setAuthModalOpen(true));
+          dispatch(setAuthModalView('new'));
         }}
       >
         Sign Up
@@ -25,8 +25,8 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
         variant="filled"
         color={dark ? 'gray' : 'indigo.6'}
         onClick={() => {
-          dispatch(setModalOpen(true));
-          dispatch(setModalView('existing'));
+          dispatch(setAuthModalOpen(true));
+          dispatch(setAuthModalView('existing'));
         }}
       >
         Log In

@@ -1,63 +1,56 @@
-import React from 'react';
-import { Menu, Button, Text, useMantineColorScheme, ActionIcon } from '@mantine/core';
-import {
-  IconSettings,
-  IconSearch,
-  IconPhoto,
-  IconMessageCircle,
-  IconTrash,
-  IconArrowsLeftRight,
-  IconHome2,
-} from '@tabler/icons-react';
+import { ActionIcon, Button, Menu, useMantineColorScheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { ColorSchemeToggle } from './ColorSchemeToggle';
+import {
+  IconHome2,
+  IconLayoutDashboard,
+  IconMessageCircle,
+  IconPlus,
+  IconTrendingUp,
+} from '@tabler/icons-react';
+import React from 'react';
+import { useAppDispatch } from '../../redux/hooks/hooks';
+import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
+import NewCommunityModal from '../NewCommunityModal/NewCommunityModal';
 
 type FeedsMenuProps = {};
 
 const FeedsMenu: React.FC<FeedsMenuProps> = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
-  const isMobile = useMediaQuery('(max-width: 600px)');
+  const isMobile = useMediaQuery('(max-width: 700px)');
+  const dispatch = useAppDispatch();
 
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
         {isMobile ? (
           <ActionIcon size="lg" color={dark ? 'gray' : 'dark'}>
-            <IconHome2 />
+            <IconLayoutDashboard />
           </ActionIcon>
         ) : (
-          <Button leftIcon={<IconHome2 />} color={dark ? 'gray' : 'dark'}>
-            Home
+          <Button leftIcon={<IconLayoutDashboard />} color={dark ? 'gray' : 'gray'}>
+            Feeds
           </Button>
         )}
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Application</Menu.Label>
-        <ColorSchemeToggle />
-        <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
-        <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
-        <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
+        <Menu.Label>Your Communities</Menu.Label>
         <Menu.Item
-          icon={<IconSearch size={14} />}
-          rightSection={
-            <Text size="xs" color="dimmed">
-              ⌘K
-            </Text>
-          }
+          icon={<IconPlus size={14} />}
+          onClick={() => dispatch(setCommunityModalOpen(true))}
         >
-          Search
+          Create Community
         </Menu.Item>
+        <Menu.Item icon={<IconMessageCircle size={14} />}>Community Placeholder</Menu.Item>
 
         <Menu.Divider />
 
-        <Menu.Label>Danger zone</Menu.Label>
-        <Menu.Item icon={<IconArrowsLeftRight size={14} />}>Transfer my data</Menu.Item>
-        <Menu.Item color="red" icon={<IconTrash size={14} />}>
-          Delete my account
-        </Menu.Item>
+        <Menu.Label>Feeds</Menu.Label>
+        <Menu.Item icon={<IconHome2 size={14} />}>Home</Menu.Item>
+        <Menu.Item icon={<IconTrendingUp size={14} />}>Popular</Menu.Item>
       </Menu.Dropdown>
+      <NewCommunityModal />
     </Menu>
   );
 };

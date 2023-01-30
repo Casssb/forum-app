@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex, Modal } from '@mantine/core';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks';
-import { setModalOpen } from '../../redux/slices/authModalSlice';
+import { setAuthModalOpen } from '../../redux/slices/authModalSlice';
 import ExistingUser from './ExistingUser';
 import NewUser from './NewUser';
 import frogCity from '../../public/frog-city-watercolour3.png';
@@ -18,7 +18,7 @@ const AuthModal: React.FC<AuthModalProps> = () => {
       <Modal
         size="auto"
         opened={isModalOpen}
-        onClose={() => dispatch(setModalOpen(false))}
+        onClose={() => dispatch(setAuthModalOpen(false))}
         padding={0}
         withCloseButton={false}
       >

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authModalReducer from './slices/authModalSlice';
+import communityModalReducer from './slices/communityModalSlice';
 
 export const store = configureStore({
   reducer: {
     authModal: authModalReducer,
+    communityModal: communityModalReducer,
   },
 });
 
