@@ -1,9 +1,12 @@
-import { Box, Button, Checkbox, Group, Radio, TextInput } from '@mantine/core';
+import { Box, Button, Checkbox, Group, Radio, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React from 'react';
+import React, { useState } from 'react';
 import { IconUser, IconEyeOff, IconLock } from '@tabler/icons-react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
+import { auth, db } from '../../firebase/firebaseConfig';
 
 interface CommunityFormProps {
   name: string;
@@ -12,6 +15,9 @@ interface CommunityFormProps {
 }
 
 const NewCommunityForm: React.FC = () => {
+  const [communityExists, setCommunityExists] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [user] = useAuthState(auth);
   const dispatch = useAppDispatch();
   const form = useForm({
     initialValues: {
@@ -25,14 +31,41 @@ const NewCommunityForm: React.FC = () => {
         value.length < 3
           ? 'Must have at least 3 characters'
           : value.length > 20
-          ? 'Too long! (20 characters max)'
+          ? 'Too long! Must be between 3 and 20 characters'
+          : /[ `!@#$%^&*()+\-=[\]{};':"\\|,.<>/?~]/.test(value)
+          ? 'Names cannot contain spaces, and underscores are the only special characters allowed'
           : null,
     },
   });
 
-  const handleSubmit = (values: CommunityFormProps) => {
-    console.log(values.name, values.nsfw, values.type);
+  const handleSubmit = async ({ name, nsfw, type }: CommunityFormProps) => {
+    setCommunityExists(false);
+    setLoading(true);
+    try {
+      const docRef = doc(db, 'communities', name);
+      await runTransaction(db, async (transaction) => {
+        const community = await transaction.get(docRef);
+        if (community.exists()) {
+          setCommunityExists(true);
+        }
+        transaction.set(docRef, {
+          creator: user?.uid,
+          createdAt: serverTimestamp(),
+          members: 1,
+          type,
+          nsfw,
+        });
+        transaction.set(doc(db, `users/${user?.uid}/communityInfo`, name), {
+          communityId: name,
+          isAdmin: true,
+        });
+      });
+    } catch (error) {
+      console.log('error creating a new community', error);
+    }
+    setLoading(false);
   };
+
   return (
     <Box sx={{ width: '100%' }}>
       <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
@@ -88,8 +121,15 @@ const NewCommunityForm: React.FC = () => {
           <Button variant="outline" onClick={() => dispatch(setCommunityModalOpen(false))}>
             Cancel
           </Button>
-          <Button type="submit">Create Community</Button>
+          <Button loading={loading} type="submit">
+            Create Community
+          </Button>
         </Group>
+        {communityExists && (
+          <Text mt="1rem" color="red">
+            A community with this name alreasy exists
+          </Text>
+        )}
       </form>
     </Box>
   );

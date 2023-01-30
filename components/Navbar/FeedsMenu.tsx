@@ -8,14 +8,17 @@ import {
   IconTrendingUp,
 } from '@tabler/icons-react';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
 import NewCommunityModal from '../NewCommunityModal/NewCommunityModal';
+import { auth } from '../../firebase/firebaseConfig';
 
 type FeedsMenuProps = {};
 
 const FeedsMenu: React.FC<FeedsMenuProps> = () => {
   const { colorScheme } = useMantineColorScheme();
+  const [user] = useAuthState(auth);
   const dark = colorScheme === 'dark';
   const isMobile = useMediaQuery('(max-width: 700px)');
   const dispatch = useAppDispatch();
@@ -35,16 +38,19 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Your Communities</Menu.Label>
-        <Menu.Item
-          icon={<IconPlus size={14} />}
-          onClick={() => dispatch(setCommunityModalOpen(true))}
-        >
-          Create Community
-        </Menu.Item>
-        <Menu.Item icon={<IconMessageCircle size={14} />}>Community Placeholder</Menu.Item>
-
-        <Menu.Divider />
+        {user && (
+          <>
+            <Menu.Label>Your Communities</Menu.Label>
+            <Menu.Item
+              icon={<IconPlus size={14} />}
+              onClick={() => dispatch(setCommunityModalOpen(true))}
+            >
+              Create Community
+            </Menu.Item>
+            <Menu.Item icon={<IconMessageCircle size={14} />}>Community Placeholder</Menu.Item>
+            <Menu.Divider />
+          </>
+        )}
 
         <Menu.Label>Feeds</Menu.Label>
         <Menu.Item icon={<IconHome2 size={14} />}>Home</Menu.Item>
