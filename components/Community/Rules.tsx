@@ -1,8 +1,8 @@
 import React from 'react';
 
-type RulesProps = {};
+interface RulesProps {}
 
 const Rules: React.FC<RulesProps> = () => {
-  return <div>Have a good coding</div>;
+  return <div>Rules</div>;
 };
 export default Rules;

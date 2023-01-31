@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
 
   return (
-    <Header height={56} className={classes.header} mb={120}>
+    <Header height={56} className={classes.header}>
       <div className={classes.inner}>
         <Group>
           <Image src={fredditLogo} alt="white & green frog logo" width={40} height={40} />

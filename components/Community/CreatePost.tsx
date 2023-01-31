@@ -1,8 +1,8 @@
 import React from 'react';
 
-type CreatePostProps = {};
+interface CreatePostProps {}
 
 const CreatePost: React.FC<CreatePostProps> = () => {
-  return <div>Have a good coding</div>;
+  return <div>Create Post</div>;
 };
 export default CreatePost;

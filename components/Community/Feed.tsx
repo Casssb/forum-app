@@ -1,8 +1,8 @@
 import React from 'react';
 
-type FeedProps = {};
+interface FeedProps {}
 
 const Feed: React.FC<FeedProps> = () => {
-  return <div>Have a good coding</div>;
+  return <div>Feed</div>;
 };
 export default Feed;
