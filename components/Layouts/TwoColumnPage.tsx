@@ -7,10 +7,13 @@ interface TwoColumnPageProps {
 
 const TwoColumnPage: React.FC<TwoColumnPageProps> = ({ children }: TwoColumnPageProps) => {
   return (
-    <Container>
+    <Box>
       <Box>{children[0]} 1</Box>
-      <Box>{children[1]} 2</Box>
-    </Container>
+      <Container size="xl" sx={{ display: 'flex', gap: '1rem' }}>
+        <Box sx={{ border: '2px solid red', flex: '3' }}>{children[1]} 1</Box>
+        <Box sx={{ border: '2px solid green', flex: '1' }}>{children[2]} 2</Box>
+      </Container>
+    </Box>
   );
 };
 export default TwoColumnPage;

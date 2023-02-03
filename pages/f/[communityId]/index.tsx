@@ -23,10 +23,12 @@ interface communityPageProps {
 const community: React.FC<communityPageProps> = ({ communityInfo }) => {
   const isLarge = useMediaQuery('(min-width: 1000px)');
   return (
-    <Box>
-      <CommunityHeader communityInfo={communityInfo} />
+    <>
       {isLarge ? (
         <ThreeColumnPage>
+          <>
+            <CommunityHeader communityInfo={communityInfo} />
+          </>
           <>
             <FeedsAside />
           </>
@@ -42,6 +44,9 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
       ) : (
         <TwoColumnPage>
           <>
+            <CommunityHeader communityInfo={communityInfo} />
+          </>
+          <>
             <CreatePost />
             <Feed />
           </>
@@ -51,7 +56,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
         </TwoColumnPage>
       )}
-    </Box>
+    </>
   );
 };
 
