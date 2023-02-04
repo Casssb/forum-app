@@ -30,7 +30,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityInfo }) => {
   const isJoined = !!userCommunityInfo.find(
     (community) => community.communityId === communityInfo.id
   );
-  console.log(userCommunityInfo);
+
   return (
     <Flex direction="column" sx={{ height: '12rem', width: '100%' }}>
       <Box sx={{ position: 'relative', height: '50%' }}>
