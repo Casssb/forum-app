@@ -22,14 +22,18 @@ import { ColorSchemeToggle } from './ColorSchemeToggle';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
 import { auth } from '../../firebase/firebaseConfig';
+import { resetCommunityInfo } from '../../redux/slices/communitySlice';
 
-type AccountMenuProps = {};
-
-const AccountMenu: React.FC<AccountMenuProps> = () => {
+const AccountMenu: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, error] = useAuthState(auth);
   const dispatch = useAppDispatch();
   const dark = colorScheme === 'dark';
+
+  const logOut = async () => {
+    await signOut(auth);
+    dispatch(resetCommunityInfo());
+  };
 
   return (
     <Menu shadow="md" width={200}>
@@ -73,7 +77,7 @@ const AccountMenu: React.FC<AccountMenuProps> = () => {
           <Menu.Item
             icon={<IconLogout size={14} />}
             onClick={() => {
-              signOut(auth);
+              logOut();
               error && console.log(error);
             }}
           >
