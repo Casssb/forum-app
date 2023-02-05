@@ -41,7 +41,6 @@ const MediaPostForm: React.FC<MediaPostFormProps> = () => {
     <Box sx={{ width: '100%' }} p="1rem">
       <form onSubmit={form.onSubmit((values) => handleSubmitMediaPost(values))}>
         <TextInput required placeholder="Title" {...form.getInputProps('title')} />
-        <Divider my="sm" />
         {files?.length ? (
           <Box
             sx={{
@@ -100,6 +99,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = () => {
             </Dropzone>
           </Box>
         )}
+        <Divider my="sm" />
 
         <Group position="right" mt="md">
           <Button disabled={files === null} type="submit">
