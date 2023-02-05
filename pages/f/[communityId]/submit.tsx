@@ -1,6 +1,6 @@
 import { Box, Container, Divider, Title } from '@mantine/core';
 import React from 'react';
-import NewPostForm from '../../../components/Posts/NewPostForm';
+import NewPost from '../../../components/Posts/NewPost';
 
 type submitProps = {};
 
@@ -10,7 +10,7 @@ const submit: React.FC<submitProps> = () => {
       <Box sx={{ flex: '3' }}>
         <Title order={4}>Create a post</Title>
         <Divider my="sm" />
-        <NewPostForm />
+        <NewPost />
       </Box>
       <Box sx={{ border: '2px solid green', flex: '1' }}>2</Box>
     </Container>

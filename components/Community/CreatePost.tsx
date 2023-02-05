@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Input, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, Input, Paper, Tooltip, useMantineColorScheme } from '@mantine/core';
 import { IconLink, IconPhoto } from '@tabler/icons-react';
 import Image from 'next/image';
 import React from 'react';
@@ -8,6 +8,7 @@ import grayscaleLogo from '../../public/freddit-grayscale.png';
 import { auth } from '../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
+import { setpostFormView } from '../../redux/slices/postFormSlice';
 
 const CreatePost: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -26,31 +27,51 @@ const CreatePost: React.FC = () => {
     router.push(`/f/${communityId}/submit`);
   };
   return (
-    <Box
+    <Paper
       sx={{
         display: 'flex',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        padding: '1rem',
         gap: '0.6rem',
-        border: '0.6px solid gray',
-        borderRadius: '3px',
       }}
       bg={dark ? 'dark' : 'gray.0'}
+      p="sm"
+      withBorder
     >
       <Image src={grayscaleLogo} height={40} width={40} alt="freddit logo (grayscale)" />
       <Input
         placeholder="Create Post"
         sx={{ flex: 1, cursor: 'pointer' }}
-        onClick={() => sendToNewPostPage()}
+        onClick={() => {
+          sendToNewPostPage();
+          dispatch(setpostFormView('post'));
+        }}
       />
-      <ActionIcon size="lg" variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 105 }}>
-        <IconPhoto size={20} />
-      </ActionIcon>
-      <ActionIcon size="lg" variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 105 }}>
+      <Tooltip label="Create Media Post">
+        <ActionIcon
+          size="lg"
+          variant="gradient"
+          gradient={{ from: 'indigo', to: 'cyan', deg: 105 }}
+          onClick={() => {
+            sendToNewPostPage();
+            dispatch(setpostFormView('media'));
+          }}
+        >
+          <IconPhoto size={20} />
+        </ActionIcon>
+      </Tooltip>
+      <ActionIcon
+        size="lg"
+        variant="gradient"
+        gradient={{ from: 'indigo', to: 'cyan', deg: 105 }}
+        onClick={() => {
+          sendToNewPostPage();
+          dispatch(setpostFormView('link'));
+        }}
+      >
         <IconLink size={20} />
       </ActionIcon>
-    </Box>
+    </Paper>
   );
 };
 export default CreatePost;
