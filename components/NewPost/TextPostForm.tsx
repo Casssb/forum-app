@@ -1,12 +1,10 @@
 import React from 'react';
 import { TextInput, Button, Group, Box, Textarea, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useAppSelector } from '../../redux/hooks/hooks';
 
-type NewPostFormProps = {};
+type TextPostFormProps = {};
 
-const NewPostForm: React.FC<NewPostFormProps> = () => {
-  const { viewState } = useAppSelector((state) => state.postForm);
+const TextPostForm: React.FC<TextPostFormProps> = () => {
   const form = useForm({
     initialValues: {
       title: '',
@@ -21,15 +19,13 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
     <Box sx={{ width: '100%' }} p="1rem">
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <TextInput required placeholder="Title" {...form.getInputProps('title')} />
-        {viewState === 'post' && (
-          <Textarea
-            mt="0.5rem"
-            minRows={4}
-            autosize
-            placeholder="Text (optional)"
-            {...form.getInputProps('body')}
-          />
-        )}
+        <Textarea
+          mt="0.5rem"
+          minRows={4}
+          autosize
+          placeholder="Text (optional)"
+          {...form.getInputProps('body')}
+        />
         <Divider my="sm" />
 
         <Group position="right" mt="md">
@@ -39,4 +35,4 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
     </Box>
   );
 };
-export default NewPostForm;
+export default TextPostForm;

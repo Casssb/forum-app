@@ -1,6 +1,6 @@
 import { Box, Container, Divider, Title } from '@mantine/core';
 import React from 'react';
-import NewPost from '../../../components/Posts/NewPost';
+import NewPost from '../../../components/NewPost/NewPost';
 
 type submitProps = {};
 

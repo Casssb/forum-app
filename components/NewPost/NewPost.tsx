@@ -1,11 +1,14 @@
 import { Box, useMantineColorScheme } from '@mantine/core';
 import React from 'react';
 import NewPostButtons from './NewPostButtons';
-import NewPostForm from './NewPostForm';
+import TextPostForm from './TextPostForm';
+import { useAppSelector } from '../../redux/hooks/hooks';
+import MediaPostForm from './MediaPostForm';
 
 interface NewPostProps {}
 
 const NewPost: React.FC<NewPostProps> = () => {
+  const { viewState } = useAppSelector((state) => state.postForm);
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
   return (
@@ -14,7 +17,8 @@ const NewPost: React.FC<NewPostProps> = () => {
       sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
     >
       <NewPostButtons />
-      <NewPostForm />
+      {viewState === 'post' && <TextPostForm />}
+      {viewState === 'media' && <MediaPostForm />}
     </Box>
   );
 };
