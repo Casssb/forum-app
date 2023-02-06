@@ -1,8 +1,9 @@
-import React from 'react';
-import { TextInput, Button, Group, Box, Textarea, Divider } from '@mantine/core';
+import { Box, Button, Divider, Group, TextInput, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { User } from 'firebase/auth';
 import { Timestamp, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { db } from '../../firebase/firebaseConfig';
 import { Post } from '../../redux/slices/postsSlice';
 
@@ -19,6 +20,7 @@ interface TextFormProps {
 }
 
 const TextPostForm: React.FC<TextPostFormProps> = ({ loading, setLoading, user, communityId }) => {
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       title: '',
@@ -44,7 +46,9 @@ const TextPostForm: React.FC<TextPostFormProps> = ({ loading, setLoading, user, 
     setLoading(true);
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const postDocRef = await addDoc(collection(db, 'posts'), newPost);
+      router.back();
     } catch (error: any) {
       console.log('firestore error', error.message);
     }

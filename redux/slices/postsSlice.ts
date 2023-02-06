@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Timestamp } from 'firebase/firestore';
 
 export interface Post {
+  id?: string;
   creator: string;
   creatorDisplayName: string;
   communityId: string;
@@ -29,7 +30,13 @@ const initialState: PostsProps = {
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    addPosts: (state, action: PayloadAction<Post[]>) => {
+      state.posts.concat(action.payload);
+    },
+  },
 });
+
+export const { addPosts } = postsSlice.actions;
 
 export default postsSlice.reducer;

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { TextInput, Button, Group, Box, Divider, Text, useMantineTheme } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
+import { Box, Button, Divider, Group, Text, TextInput, useMantineTheme } from '@mantine/core';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
-import Image from 'next/image';
 import { User } from 'firebase/auth';
 import { Timestamp, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { db, storage } from '../../firebase/firebaseConfig';
 import { Post } from '../../redux/slices/postsSlice';
 
@@ -28,8 +29,8 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
   communityId,
 }) => {
   const theme = useMantineTheme();
+  const router = useRouter();
   const [files, setFiles] = useState<FileWithPath[] | null>(null);
-  const [imageString, setImageString] = useState('');
   const form = useForm({
     initialValues: {
       title: '',
@@ -55,11 +56,12 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
     try {
       const postDocRef = await addDoc(collection(db, 'posts'), newPost);
       const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
-      await uploadString(imageRef, imageString);
+      await uploadBytes(imageRef, files![0]);
       const imageDownloadURL = await getDownloadURL(imageRef);
       await updateDoc(postDocRef, {
         imageURL: imageDownloadURL,
       });
+      router.back();
     } catch (error: any) {
       console.log('firestore error', error.message);
     }
@@ -97,16 +99,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
           <Box mt="0.5rem">
             <Dropzone
               accept={IMAGE_MIME_TYPE}
-              onDrop={(fileArray) => {
-                setFiles(fileArray);
-                fileArray.forEach((file) => {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onload = () => {
-                    setImageString(reader.result as string);
-                  };
-                });
-              }}
+              onDrop={setFiles}
               maxSize={3 * 1024 ** 2}
               maxFiles={1}
             >

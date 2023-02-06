@@ -11,9 +11,9 @@ import ThreeColumnPage from '../../../components/Layouts/ThreeColumnPage';
 import TwoColumnPage from '../../../components/Layouts/TwoColumnPage';
 import FeedsAside from '../../../components/FeedsAside/FeedsAside';
 import CreatePost from '../../../components/Community/CreatePost';
-import Feed from '../../../components/Community/Feed';
 import About from '../../../components/Community/About';
 import Rules from '../../../components/Community/Rules';
+import Posts from '../../../components/Posts/Posts';
 
 interface communityPageProps {
   communityInfo: CommunityProps;
@@ -33,7 +33,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <CreatePost />
-            <Feed />
+            <Posts communityInfo={communityInfo} />
           </>
           <>
             <About />
@@ -47,7 +47,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <CreatePost />
-            <Feed />
+            <Posts communityInfo={communityInfo} />
           </>
           <>
             <About />
