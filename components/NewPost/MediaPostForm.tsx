@@ -4,14 +4,29 @@ import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
 import { useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import Image from 'next/image';
+import { User } from 'firebase/auth';
+import { Timestamp, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { db, storage } from '../../firebase/firebaseConfig';
+import { Post } from '../../redux/slices/postsSlice';
 
-interface MediaPostFormProps {}
+interface MediaPostFormProps {
+  loading: boolean;
+  setLoading: Function;
+  user: User;
+  communityId: string | undefined;
+}
 
 interface MediaFormProps {
   title: string;
 }
 
-const MediaPostForm: React.FC<MediaPostFormProps> = () => {
+const MediaPostForm: React.FC<MediaPostFormProps> = ({
+  loading,
+  setLoading,
+  user,
+  communityId,
+}) => {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<FileWithPath[] | null>(null);
 
@@ -25,9 +40,31 @@ const MediaPostForm: React.FC<MediaPostFormProps> = () => {
     },
   });
 
-  const handleSubmitMediaPost = (values: MediaFormProps) => {
+  const handleSubmitMediaPost = async (values: MediaFormProps) => {
     const imageUrl = URL.createObjectURL(files![0]);
-    console.log(values, imageUrl);
+    const newPost: Post = {
+      creator: user.uid,
+      creatorDisplayName: user.email!.split('@')[0],
+      communityId: communityId as string,
+      title: values.title,
+      totalComments: 0,
+      numOfVotes: 0,
+      createdAt: serverTimestamp() as Timestamp,
+    };
+    setLoading(true);
+
+    try {
+      const postDocRef = await addDoc(collection(db, 'posts'), newPost);
+      const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
+      await uploadString(imageRef, imageUrl);
+      const imageDownloadURL = await getDownloadURL(imageRef);
+      await updateDoc(postDocRef, {
+        imageURL: imageDownloadURL,
+      });
+    } catch (error: any) {
+      console.log('firestore error', error.message);
+    }
+    setLoading(false);
   };
 
   const createImagePreview = () => {
@@ -50,6 +87,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}
+            mt="0.5rem"
           >
             {createImagePreview()}
             <Button color="red" onClick={() => setFiles(null)}>
@@ -57,7 +95,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = () => {
             </Button>
           </Box>
         ) : (
-          <Box>
+          <Box mt="0.5rem">
             <Dropzone
               accept={IMAGE_MIME_TYPE}
               onDrop={setFiles}
@@ -102,7 +140,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = () => {
         <Divider my="sm" />
 
         <Group position="right" mt="md">
-          <Button disabled={files === null} type="submit">
+          <Button loading={loading} disabled={files === null} type="submit">
             Post
           </Button>
         </Group>

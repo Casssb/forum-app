@@ -3,6 +3,7 @@ import authModalReducer from './slices/authModalSlice';
 import communityModalReducer from './slices/communityModalSlice';
 import communityReducer from './slices/communitySlice';
 import postFormReducer from './slices/postFormSlice';
+import postsReducer from './slices/postsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     communityModal: communityModalReducer,
     community: communityReducer,
     postForm: postFormReducer,
+    posts: postsReducer,
   },
 });
 
