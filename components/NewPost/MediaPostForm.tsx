@@ -29,7 +29,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
 }) => {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<FileWithPath[] | null>(null);
-
+  const [imageString, setImageString] = useState('');
   const form = useForm({
     initialValues: {
       title: '',
@@ -41,7 +41,6 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
   });
 
   const handleSubmitMediaPost = async (values: MediaFormProps) => {
-    const imageUrl = URL.createObjectURL(files![0]);
     const newPost: Post = {
       creator: user.uid,
       creatorDisplayName: user.email!.split('@')[0],
@@ -56,7 +55,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
     try {
       const postDocRef = await addDoc(collection(db, 'posts'), newPost);
       const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
-      await uploadString(imageRef, imageUrl);
+      await uploadString(imageRef, imageString);
       const imageDownloadURL = await getDownloadURL(imageRef);
       await updateDoc(postDocRef, {
         imageURL: imageDownloadURL,
@@ -98,7 +97,16 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
           <Box mt="0.5rem">
             <Dropzone
               accept={IMAGE_MIME_TYPE}
-              onDrop={setFiles}
+              onDrop={(fileArray) => {
+                setFiles(fileArray);
+                fileArray.forEach((file) => {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = () => {
+                    setImageString(reader.result as string);
+                  };
+                });
+              }}
               maxSize={3 * 1024 ** 2}
               maxFiles={1}
             >
