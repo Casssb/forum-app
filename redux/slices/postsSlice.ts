@@ -32,7 +32,7 @@ export const postsSlice = createSlice({
   initialState,
   reducers: {
     addPosts: (state, action: PayloadAction<Post[]>) => {
-      state.posts.concat(action.payload);
+      state.posts = action.payload;
     },
   },
 });

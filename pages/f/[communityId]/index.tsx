@@ -13,7 +13,7 @@ import FeedsAside from '../../../components/FeedsAside/FeedsAside';
 import CreatePost from '../../../components/Community/CreatePost';
 import About from '../../../components/Community/About';
 import Rules from '../../../components/Community/Rules';
-import Posts from '../../../components/Posts/Posts';
+import PostsFeed from '../../../components/Posts/PostsFeed';
 
 interface communityPageProps {
   communityInfo: CommunityProps;
@@ -33,7 +33,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <CreatePost />
-            <Posts communityInfo={communityInfo} />
+            <PostsFeed communityInfo={communityInfo} />
           </>
           <>
             <About />
@@ -47,7 +47,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <CreatePost />
-            <Posts communityInfo={communityInfo} />
+            <PostsFeed communityInfo={communityInfo} />
           </>
           <>
             <About />

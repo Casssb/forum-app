@@ -13,6 +13,7 @@ export const store = configureStore({
     postForm: postFormReducer,
     posts: postsReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
