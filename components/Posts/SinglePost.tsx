@@ -22,17 +22,34 @@ import {
 } from '@tabler/icons-react';
 import moment from 'moment';
 import Image from 'next/image';
+import { useSetState } from '@mantine/hooks';
 import { Post } from '../../redux/slices/postsSlice';
 
 interface SinglePostProps {
   post: Post;
   userIsOwner?: boolean;
   userVote?: number;
+  deletePost: (post: Post) => Promise<boolean>;
 }
 
-const SinglePost: React.FC<SinglePostProps> = ({ post, userVote, userIsOwner }) => {
+const SinglePost: React.FC<SinglePostProps> = ({ post, userVote, userIsOwner, deletePost }) => {
   const { colorScheme } = useMantineColorScheme();
+  const [postError, setPostError] = useSetState(null as any);
+  const [loadingDelete, setLoadingDelete] = useSetState<boolean>(false);
   const dark = colorScheme === 'dark';
+
+  const handleDelete = async () => {
+    setLoadingDelete(true);
+    try {
+      const success = await deletePost(post);
+      if (!success) {
+        throw new Error('Failed to delete post');
+      }
+    } catch (error: any) {
+      setPostError(error.message);
+    }
+    setLoadingDelete(false);
+  };
 
   return (
     <Card
@@ -114,7 +131,12 @@ const SinglePost: React.FC<SinglePostProps> = ({ post, userVote, userIsOwner }) 
               Save
             </Button>
             {userIsOwner && (
-              <Button leftIcon={<IconTrash />} variant="subtle">
+              <Button
+                loading={loadingDelete}
+                leftIcon={<IconTrash />}
+                variant="subtle"
+                onClick={handleDelete}
+              >
                 Delete
               </Button>
             )}

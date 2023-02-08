@@ -4,10 +4,11 @@ import { Box } from '@mantine/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase/firebaseConfig';
 import { CommunityProps } from '../../redux/slices/communitySlice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks';
+import { useAppDispatch } from '../../redux/hooks/hooks';
 import { Post, addPosts } from '../../redux/slices/postsSlice';
 import SinglePost from './SinglePost';
 import PostSkeleton from './PostSkeleton';
+import usePosts from '../../hooks/usePosts';
 
 interface PostsProps {
   communityInfo: CommunityProps;
@@ -16,8 +17,9 @@ interface PostsProps {
 const Posts: React.FC<PostsProps> = ({ communityInfo }) => {
   const [user] = useAuthState(auth);
   const dispatch = useAppDispatch();
-  const { posts } = useAppSelector((state) => state.posts);
+  const { posts, deletePost } = usePosts();
   const [loading, setLoading] = useState(false);
+
   const getPosts = async () => {
     setLoading(true);
     try {
@@ -61,6 +63,7 @@ const Posts: React.FC<PostsProps> = ({ communityInfo }) => {
               userIsOwner={user?.uid === post.creator}
               userVote={undefined}
               key={post.id}
+              deletePost={deletePost}
             />
           ))}
         </Box>

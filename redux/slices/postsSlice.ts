@@ -34,9 +34,15 @@ export const postsSlice = createSlice({
     addPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
     },
+    deleteSinglePost: (state, action: PayloadAction<Post>) => {
+      state.posts.splice(
+        state.posts.findIndex((post) => post.id === action.payload.id),
+        1
+      );
+    },
   },
 });
 
-export const { addPosts } = postsSlice.actions;
+export const { addPosts, deleteSinglePost } = postsSlice.actions;
 
 export default postsSlice.reducer;
