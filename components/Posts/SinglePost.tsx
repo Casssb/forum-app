@@ -92,7 +92,13 @@ const SinglePost: React.FC<SinglePostProps> = ({ post, userVote, userIsOwner }) 
           <Title order={3}>{post.title}</Title>
           {post.imageURL ? (
             <Box sx={{ position: 'relative', height: '400px' }}>
-              <Image src={post.imageURL} alt={post.title} fill />
+              <Image
+                src={post.imageURL}
+                alt={post.title}
+                fill
+                placeholder="blur"
+                blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0cnevBwAC9AFR64pKBAAAAABJRU5ErkJggg=="
+              />
             </Box>
           ) : (
             <Text>{post.body}</Text>
