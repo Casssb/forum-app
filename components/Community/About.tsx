@@ -66,7 +66,7 @@ const About: React.FC<AboutProps> = ({ currentCommunity }) => {
           variant="outline"
           fullWidth
           mt="1rem"
-          onClick={() => router.push(`/f/${router.query.communityId}/submit`)}
+          onClick={() => router.push(`/f/${currentCommunity.id}/submit`)}
         >
           Create Post
         </Button>

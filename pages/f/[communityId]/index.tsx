@@ -1,20 +1,22 @@
 /* eslint-disable consistent-return */
+import { useMediaQuery } from '@mantine/hooks';
 import { doc, getDoc } from 'firebase/firestore';
 import { GetServerSidePropsContext } from 'next';
 import React, { useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import safeJsonStringify from 'safe-json-stringify';
-import { useMediaQuery } from '@mantine/hooks';
-import { db } from '../../../firebase/firebaseConfig';
-import { CommunityProps, addCurrentCommunity } from '../../../redux/slices/communitySlice';
+import About from '../../../components/Community/About';
+import Admin from '../../../components/Community/Admin';
 import CommunityHeader from '../../../components/Community/CommunityHeader';
+import CreatePost from '../../../components/Community/CreatePost';
+import Rules from '../../../components/Community/Rules';
+import FeedsAside from '../../../components/FeedsAside/FeedsAside';
 import ThreeColumnPage from '../../../components/Layouts/ThreeColumnPage';
 import TwoColumnPage from '../../../components/Layouts/TwoColumnPage';
-import FeedsAside from '../../../components/FeedsAside/FeedsAside';
-import CreatePost from '../../../components/Community/CreatePost';
-import About from '../../../components/Community/About';
-import Rules from '../../../components/Community/Rules';
 import PostsFeed from '../../../components/Posts/PostsFeed';
+import { auth, db } from '../../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../../redux/hooks/hooks';
+import { CommunityProps, addCurrentCommunity } from '../../../redux/slices/communitySlice';
 
 interface communityPageProps {
   communityInfo: CommunityProps;
@@ -23,6 +25,7 @@ interface communityPageProps {
 const community: React.FC<communityPageProps> = ({ communityInfo }) => {
   const isLarge = useMediaQuery('(min-width: 1000px)');
   const dispatch = useAppDispatch();
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     dispatch(addCurrentCommunity(communityInfo));
@@ -43,6 +46,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <About currentCommunity={communityInfo} />
+            {user?.uid === communityInfo.creator && <Admin currentCommunity={communityInfo} />}
             <Rules />
           </>
         </ThreeColumnPage>
@@ -57,6 +61,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <About currentCommunity={communityInfo} />
+            {user?.uid === communityInfo.creator && <Admin currentCommunity={communityInfo} />}
             <Rules />
           </>
         </TwoColumnPage>

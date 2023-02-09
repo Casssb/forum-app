@@ -1,11 +1,13 @@
+import { collection, deleteDoc, doc, writeBatch } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, db, storage } from '../firebase/firebaseConfig';
 import { useAppDispatch, useAppSelector } from '../redux/hooks/hooks';
-import { Post, deleteSinglePost } from '../redux/slices/postsSlice';
-import { db, storage } from '../firebase/firebaseConfig';
+import { Post, PostVote, deleteSinglePost } from '../redux/slices/postsSlice';
 
 const usePosts = () => {
-  const { posts } = useAppSelector((state) => state.posts);
+  const { posts, postVotes } = useAppSelector((state) => state.posts);
+  const [user] = useAuthState(auth);
   const dispatch = useAppDispatch();
 
   const deletePost = async (post: Post): Promise<boolean> => {
@@ -22,6 +24,35 @@ const usePosts = () => {
     } catch (error: any) {
       console.log('Firebase error deleting post', error.message);
       return false;
+    }
+  };
+
+  const handleVote = async (post: Post, vote: number, communityId: string) => {
+    try {
+      const { numOfVotes } = post;
+      const existingVote = postVotes.find((postVote) => postVote.postId === post.id);
+      const batch = writeBatch(db);
+      const updatedPost = { ...post };
+      let voteChange = vote;
+      if (!existingVote) {
+        const postVoteRef = doc(collection(db, 'users', `${user?.uid}/postVotes`));
+
+        const newVote: PostVote = {
+          id: postVoteRef.id,
+          postId: post.id!,
+          communityId,
+          voteValue: vote,
+        };
+        batch.set(postVoteRef, newVote);
+        updatedPost.numOfVotes = numOfVotes + vote;
+      } else {
+        const postVoteRef = doc(db, 'users', `${user?.uid}/posVotes/${existingVote.id}`);
+        if (existingVote.voteValue === vote) {
+          updatedPost.numOfVotes = numOfVotes - vote;
+        }
+      }
+    } catch (error: any) {
+      console.log('error updating vote status', error.message);
     }
   };
 

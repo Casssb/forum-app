@@ -17,14 +17,23 @@ export interface Post {
   createdAt: Timestamp;
 }
 
+export interface PostVote {
+  id: string;
+  postId: string;
+  communityId: string;
+  voteValue: number;
+}
+
 interface PostsProps {
   selectedPost: Post | null;
   posts: Post[];
+  postVotes: PostVote[];
 }
 
 const initialState: PostsProps = {
   selectedPost: null,
   posts: [],
+  postVotes: [],
 };
 
 export const postsSlice = createSlice({

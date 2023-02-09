@@ -9,6 +9,8 @@ export interface CommunityProps {
   type: 'public' | 'private' | 'restricted';
   createdAt?: Timestamp;
   nsfw: boolean;
+  imageURL?: string;
+  bgImageURL?: string;
 }
 
 export interface UserCommunityInfoProps {
@@ -46,6 +48,16 @@ export const communitySlice = createSlice({
     addCurrentCommunity: (state, action: PayloadAction<CommunityProps>) => {
       state.currentCommunity = action.payload;
     },
+    setCurrentCommunityBadge: (state, action) => {
+      if (state.currentCommunity) {
+        state.currentCommunity.imageURL = action.payload;
+      }
+    },
+    setCurrentCommunityBackground: (state, action) => {
+      if (state.currentCommunity) {
+        state.currentCommunity.bgImageURL = action.payload;
+      }
+    },
   },
 });
 
@@ -55,6 +67,8 @@ export const {
   appendCommunityInfo,
   removeCommunityInfo,
   addCurrentCommunity,
+  setCurrentCommunityBadge,
+  setCurrentCommunityBackground,
 } = communitySlice.actions;
 
 export default communitySlice.reducer;

@@ -24,7 +24,7 @@ interface CommunityHeaderProps {
 
 const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityInfo }) => {
   const { handleCommunityJoinLeave, loading } = useCommunityInfo();
-  const { userCommunityInfo } = useAppSelector((state) => state.community);
+  const { userCommunityInfo, currentCommunity } = useAppSelector((state) => state.community);
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
   const isJoined = !!userCommunityInfo.find(
@@ -35,7 +35,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityInfo }) => {
     <Flex direction="column" sx={{ height: '12rem', width: '100%' }}>
       <Box sx={{ position: 'relative', height: '50%' }}>
         <Image
-          src={defaultBackground}
+          src={currentCommunity?.bgImageURL ? currentCommunity.bgImageURL : defaultBackground}
           alt="frog in black & white watercolour city"
           fill
           style={{ objectFit: 'cover', zIndex: 0 }}
@@ -52,7 +52,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityInfo }) => {
           }}
         >
           <Image
-            src={grayscaleLogo}
+            src={currentCommunity?.imageURL ? currentCommunity.imageURL : grayscaleLogo}
             alt="Freddit frog logo, grayscale"
             height={70}
             width={70}
