@@ -14,7 +14,7 @@ const ThreeColumnPage: React.FC<ThreeColumnPageProps> = ({ children }: ThreeColu
           <Box>{children[0]} 1</Box>
           <Container size="xl" sx={{ display: 'flex', width: '100%', gap: '1rem', flex: '3' }}>
             <Box sx={{ flex: '2' }}>{children[2]} 2</Box>
-            <Box sx={{ border: '2px solid green', flex: '1' }}>{children[3]} 3</Box>
+            <Box sx={{ flex: '1' }}>{children[3]} 3</Box>
           </Container>
         </Box>
       </Box>

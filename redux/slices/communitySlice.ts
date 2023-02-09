@@ -14,10 +14,12 @@ export interface CommunityProps {
 export interface UserCommunityInfoProps {
   communityId: string;
   isAdmin?: boolean;
+  imageURL?: string;
 }
 
 interface CommunityStateProps {
   userCommunityInfo: UserCommunityInfoProps[];
+  currentCommunity?: CommunityProps;
 }
 
 const initialState: CommunityStateProps = {
@@ -41,10 +43,18 @@ export const communitySlice = createSlice({
       );
     },
     resetCommunityInfo: () => initialState,
+    addCurrentCommunity: (state, action: PayloadAction<CommunityProps>) => {
+      state.currentCommunity = action.payload;
+    },
   },
 });
 
-export const { setUserCommunities, resetCommunityInfo, appendCommunityInfo, removeCommunityInfo } =
-  communitySlice.actions;
+export const {
+  setUserCommunities,
+  resetCommunityInfo,
+  appendCommunityInfo,
+  removeCommunityInfo,
+  addCurrentCommunity,
+} = communitySlice.actions;
 
 export default communitySlice.reducer;

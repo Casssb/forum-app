@@ -14,11 +14,15 @@ const usePosts = () => {
         const imageRef = ref(storage, `posts/${post.id}/image`);
         await deleteObject(imageRef);
       }
+
       const postDocRef = doc(db, 'posts', post.id!);
       await deleteDoc(postDocRef);
       dispatch(deleteSinglePost(post));
-    } catch (error) {}
-    return true;
+      return true;
+    } catch (error: any) {
+      console.log('Firebase error deleting post', error.message);
+      return false;
+    }
   };
 
   return {
