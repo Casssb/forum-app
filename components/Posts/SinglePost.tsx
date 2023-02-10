@@ -30,9 +30,16 @@ interface SinglePostProps {
   userIsOwner?: boolean;
   userVote?: number;
   deletePost: (post: Post) => Promise<boolean>;
+  handleVote: (post: Post, vote: number, communityId: string) => void;
 }
 
-const SinglePost: React.FC<SinglePostProps> = ({ post, userVote, userIsOwner, deletePost }) => {
+const SinglePost: React.FC<SinglePostProps> = ({
+  post,
+  userVote,
+  userIsOwner,
+  deletePost,
+  handleVote,
+}) => {
   const { colorScheme } = useMantineColorScheme();
   const [postError, setPostError] = useSetState(null as any);
   const [loadingDelete, setLoadingDelete] = useSetState<boolean>(false);
@@ -82,12 +89,12 @@ const SinglePost: React.FC<SinglePostProps> = ({ post, userVote, userIsOwner, de
             bg={dark ? 'dark.7' : 'gray.1'}
             py="0.4rem"
           >
-            <ActionIcon variant="subtle">
-              {userVote === 1 ? <IconArrowBigUpFilled /> : <IconArrowBigUp />}
+            <ActionIcon variant="subtle" onClick={() => handleVote(post, 1, post.communityId)}>
+              {userVote && userVote === 1 ? <IconArrowBigUpFilled /> : <IconArrowBigUp />}
             </ActionIcon>
             <Text>{post.numOfVotes}</Text>
-            <ActionIcon variant="subtle">
-              {userVote === -1 ? <IconArrowBigDownFilled /> : <IconArrowBigDown />}
+            <ActionIcon variant="subtle" onClick={() => handleVote(post, -1, post.communityId)}>
+              {userVote && userVote === -1 ? <IconArrowBigDownFilled /> : <IconArrowBigDown />}
             </ActionIcon>
           </Flex>
         </Box>

@@ -11,7 +11,6 @@ type submitProps = {};
 const submit: React.FC<submitProps> = () => {
   const [user] = useAuthState(auth);
   const { currentCommunity } = useAppSelector((state) => state.community);
-  console.log(currentCommunity);
   return (
     <Container size="xl" sx={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
       <Box sx={{ flex: '3' }}>

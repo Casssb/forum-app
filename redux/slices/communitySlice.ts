@@ -44,7 +44,9 @@ export const communitySlice = createSlice({
         1
       );
     },
-    resetCommunityInfo: () => initialState,
+    resetCommunityInfo: (state) => {
+      state.userCommunityInfo = [];
+    },
     addCurrentCommunity: (state, action: PayloadAction<CommunityProps>) => {
       state.currentCommunity = action.payload;
     },

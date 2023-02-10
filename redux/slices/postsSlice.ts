@@ -49,9 +49,55 @@ export const postsSlice = createSlice({
         1
       );
     },
+    updatePostsArrayVoteValue: (state, action: PayloadAction<{ post: Post; vote: number }>) => {
+      state.posts.forEach((elem) => {
+        if (elem.id === action.payload.post.id) {
+          elem.numOfVotes = action.payload.vote;
+        }
+      });
+    },
+    setPostVotes: (state, action: PayloadAction<PostVote[]>) => {
+      state.postVotes = action.payload;
+    },
+    addNewPostVote: (state, action: PayloadAction<PostVote>) => {
+      if (state.postVotes) {
+        state.postVotes.push(action.payload);
+      }
+    },
+    updatePostVote: (state, action: PayloadAction<{ id: string; vote: number }>) => {
+      if (state.postVotes) {
+        state.postVotes.forEach((elem) => {
+          if (elem.id === action.payload.id) {
+            elem.voteValue = action.payload.vote;
+          }
+        });
+      }
+    },
+    deletePostVote: (state, action: PayloadAction<PostVote>) => {
+      if (state.postVotes) {
+        state.postVotes.splice(
+          state.postVotes.findIndex((vote) => vote.id === action.payload.id),
+          1
+        );
+      }
+    },
+    clearPostVotes: (state) => {
+      if (state.postVotes) {
+        state.postVotes = [];
+      }
+    },
   },
 });
 
-export const { addPosts, deleteSinglePost } = postsSlice.actions;
+export const {
+  addPosts,
+  deleteSinglePost,
+  updatePostsArrayVoteValue,
+  setPostVotes,
+  addNewPostVote,
+  updatePostVote,
+  deletePostVote,
+  clearPostVotes,
+} = postsSlice.actions;
 
 export default postsSlice.reducer;
