@@ -31,6 +31,7 @@ interface SinglePostProps {
   userVote?: number;
   deletePost: (post: Post) => Promise<boolean>;
   handleVote: (post: Post, vote: number, communityId: string) => void;
+  selectPost?: (post: Post) => void;
 }
 
 const SinglePost: React.FC<SinglePostProps> = ({
@@ -39,11 +40,13 @@ const SinglePost: React.FC<SinglePostProps> = ({
   userIsOwner,
   deletePost,
   handleVote,
+  selectPost,
 }) => {
   const { colorScheme } = useMantineColorScheme();
   const [postError, setPostError] = useSetState(null as any);
   const [loadingDelete, setLoadingDelete] = useSetState<boolean>(false);
   const dark = colorScheme === 'dark';
+  const singlePost = !selectPost;
 
   const handleDelete = async () => {
     setLoadingDelete(true);
@@ -65,7 +68,6 @@ const SinglePost: React.FC<SinglePostProps> = ({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         gap: '0.6rem',
-        cursor: 'pointer',
         height: '100%',
       }}
       p="xs"
@@ -107,15 +109,32 @@ const SinglePost: React.FC<SinglePostProps> = ({
             height: '100%',
           }}
         >
-          <Group position="left" sx={{ height: '100%' }}>
+          <Group
+            position="left"
+            sx={{ height: '100%', cursor: `${singlePost ? 'auto' : 'pointer'}` }}
+            onClick={() => selectPost && selectPost(post)}
+          >
             <Text>
               Posted by u/{post.creatorDisplayName}{' '}
               {moment(new Date(post.createdAt.seconds * 1000)).fromNow()}
             </Text>
           </Group>
-          <Title order={3}>{post.title}</Title>
+          <Title
+            order={3}
+            sx={{ cursor: `${singlePost ? 'auto' : 'pointer'}` }}
+            onClick={() => selectPost && selectPost(post)}
+          >
+            {post.title}
+          </Title>
           {post.imageURL ? (
-            <Box sx={{ position: 'relative', height: '400px' }}>
+            <Box
+              sx={{
+                position: 'relative',
+                minHeight: '400px',
+                cursor: `${singlePost ? 'auto' : 'pointer'}`,
+              }}
+              onClick={() => selectPost && selectPost(post)}
+            >
               <Image
                 src={post.imageURL}
                 alt={post.title}
@@ -125,7 +144,12 @@ const SinglePost: React.FC<SinglePostProps> = ({
               />
             </Box>
           ) : (
-            <Text>{post.body}</Text>
+            <Text
+              sx={{ cursor: `${singlePost ? 'auto' : 'pointer'}` }}
+              onClick={() => selectPost && selectPost(post)}
+            >
+              {post.body}
+            </Text>
           )}
           <Flex mt="0.4rem">
             <Button leftIcon={<IconMessageCircle2 />} variant="subtle">

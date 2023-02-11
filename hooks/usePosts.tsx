@@ -1,9 +1,11 @@
 import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db, storage } from '../firebase/firebaseConfig';
 import { useAppDispatch, useAppSelector } from '../redux/hooks/hooks';
+import { setAuthModalOpen, setAuthModalView } from '../redux/slices/authModalSlice';
 import {
   Post,
   PostVote,
@@ -12,16 +14,23 @@ import {
   deletePostVote,
   deleteSinglePost,
   setPostVotes,
+  setSelectedPost,
   updatePostVote,
   updatePostsArrayVoteValue,
+  updateSelectedPostVoteValue,
 } from '../redux/slices/postsSlice';
-import { setAuthModalOpen, setAuthModalView } from '../redux/slices/authModalSlice';
 
 const usePosts = () => {
-  const { posts, postVotes } = useAppSelector((state) => state.posts);
+  const { posts, postVotes, selectedPost } = useAppSelector((state) => state.posts);
   const { currentCommunity } = useAppSelector((state) => state.community);
   const [user] = useAuthState(auth);
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const selectPost = (post: Post) => {
+    dispatch(setSelectedPost(post));
+    router.push(`/f/${post.communityId}/comments/${post.id}`);
+  };
 
   const deletePost = async (post: Post): Promise<boolean> => {
     try {
@@ -66,6 +75,7 @@ const usePosts = () => {
         batch.set(postVoteRef, newVote);
         dispatch(updatePostsArrayVoteValue({ post, vote: numOfVotes + vote }));
         dispatch(addNewPostVote(newVote));
+        selectedPost && dispatch(updateSelectedPostVoteValue(numOfVotes + vote));
       } else {
         const postVoteRef = doc(db, 'users', `${user?.uid}/postVotes/${existingVote.id}`);
 
@@ -73,11 +83,13 @@ const usePosts = () => {
           voteChange *= -1;
           dispatch(updatePostsArrayVoteValue({ post, vote: numOfVotes - vote }));
           dispatch(deletePostVote(existingVote));
+          selectedPost && dispatch(updateSelectedPostVoteValue(numOfVotes - vote));
           batch.delete(postVoteRef);
         } else {
           voteChange = 2 * vote;
           dispatch(updatePostsArrayVoteValue({ post, vote: numOfVotes + 2 * vote }));
           dispatch(updatePostVote({ id: existingVote.id, vote }));
+          selectedPost && dispatch(updateSelectedPostVoteValue(numOfVotes + 2 * vote));
           batch.update(postVoteRef, {
             voteValue: vote,
           });
@@ -121,8 +133,10 @@ const usePosts = () => {
   return {
     posts,
     postVotes,
+    selectedPost,
     deletePost,
     handleVote,
+    selectPost,
   };
 };
 export default usePosts;

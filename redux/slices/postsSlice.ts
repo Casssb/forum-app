@@ -86,6 +86,14 @@ export const postsSlice = createSlice({
         state.postVotes = [];
       }
     },
+    setSelectedPost: (state, action: PayloadAction<Post>) => {
+      state.selectedPost = action.payload;
+    },
+    updateSelectedPostVoteValue: (state, action) => {
+      if (state.selectedPost) {
+        state.selectedPost.numOfVotes = action.payload;
+      }
+    },
   },
 });
 
@@ -98,6 +106,8 @@ export const {
   updatePostVote,
   deletePostVote,
   clearPostVotes,
+  setSelectedPost,
+  updateSelectedPostVoteValue,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;
