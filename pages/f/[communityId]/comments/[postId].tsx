@@ -1,19 +1,20 @@
 import { Box, Container } from '@mantine/core';
+import { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import About from '../../../../components/Community/About';
+import Comments from '../../../../components/Posts/Comments';
 import SinglePost from '../../../../components/Posts/SinglePost';
 import { auth, db } from '../../../../firebase/firebaseConfig';
 import useCommunityInfo from '../../../../hooks/useCommunityInfo';
 import usePosts from '../../../../hooks/usePosts';
 import { useAppDispatch } from '../../../../redux/hooks/hooks';
 import { Post, setSelectedPost } from '../../../../redux/slices/postsSlice';
-import Comments from '../../../../components/Posts/Comments';
 
 const PostPage: React.FC = () => {
-  const { posts, postVotes, selectedPost, deletePost, handleVote } = usePosts();
+  const { postVotes, selectedPost, deletePost, handleVote } = usePosts();
   const { currentCommunity } = useCommunityInfo();
   const [user] = useAuthState(auth);
   const router = useRouter();
@@ -54,7 +55,11 @@ const PostPage: React.FC = () => {
             />
           )}
           {selectedPost && (
-            <Comments selectedPost={selectedPost} communityId={currentCommunity?.id} user={user} />
+            <Comments
+              selectedPost={selectedPost}
+              communityId={currentCommunity?.id as string}
+              user={user as User}
+            />
           )}
         </Box>
         <Box sx={{ flex: '1' }}>

@@ -94,6 +94,11 @@ export const postsSlice = createSlice({
         state.selectedPost.numOfVotes = action.payload;
       }
     },
+    incrementSelectedPostComments: (state) => {
+      if (state.selectedPost) {
+        state.selectedPost.totalComments += 1;
+      }
+    },
   },
 });
 
@@ -108,6 +113,7 @@ export const {
   clearPostVotes,
   setSelectedPost,
   updateSelectedPostVoteValue,
+  incrementSelectedPostComments,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;

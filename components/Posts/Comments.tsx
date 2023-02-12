@@ -1,7 +1,11 @@
-import { Box, Card, useMantineColorScheme } from '@mantine/core';
+import { Box, Card, Text, useMantineColorScheme } from '@mantine/core';
 import { User } from 'firebase/auth';
-import React, { useEffect } from 'react';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { db } from '../../firebase/firebaseConfig';
 import { Post } from '../../redux/slices/postsSlice';
+import CommentForm, { Comment } from './CommentForm';
+import SingleComment from './SingleComment';
 
 interface CommentsProps {
   user?: User;
@@ -12,14 +16,33 @@ interface CommentsProps {
 const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const createComment = async (text: string) => {};
-  const deleteComment = async (comment: any) => {};
-  const getComments = async () => {};
+  const getComments = async () => {
+    setLoading(true);
+    try {
+      const commentsQuery = query(
+        collection(db, 'comments'),
+        where('postId', '==', selectedPost.id),
+        orderBy('createdAt', 'desc')
+      );
+      const commentDocs = await getDocs(commentsQuery);
+      const commentsArray = commentDocs.docs.map((com) => ({
+        id: com.id,
+        ...com.data(),
+      }));
+      setComments(commentsArray as Comment[]);
+    } catch (error: any) {
+      console.log('Firebase error getting comments', error.message);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     getComments();
   }, []);
+
   return (
     <Box
       sx={{
@@ -33,8 +56,9 @@ const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) 
       <Card
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'space-evenly',
-          alignItems: 'center',
+          alignItems: 'start',
           gap: '0.6rem',
           height: '100%',
         }}
@@ -42,7 +66,23 @@ const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) 
         bg={dark ? 'dark' : 'gray.0'}
         withBorder
       >
-        Comments
+        {user && (
+          <Text>
+            Comment as{' '}
+            <Text span variant="gradient">
+              {user.displayName}
+            </Text>
+          </Text>
+        )}
+        <CommentForm
+          user={user}
+          selectedPost={selectedPost}
+          communityId={communityId}
+          setComments={setComments}
+        />
+        {comments.map((comment) => (
+          <SingleComment comment={comment} key={comment.id} userId={user?.uid} />
+        ))}
       </Card>
     </Box>
   );
