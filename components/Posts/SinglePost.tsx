@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   ActionIcon,
   Box,
@@ -10,6 +9,7 @@ import {
   Title,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useSetState } from '@mantine/hooks';
 import {
   IconArrowBigDown,
   IconArrowBigDownFilled,
@@ -22,7 +22,8 @@ import {
 } from '@tabler/icons-react';
 import moment from 'moment';
 import Image from 'next/image';
-import { useSetState } from '@mantine/hooks';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { Post } from '../../redux/slices/postsSlice';
 
 interface SinglePostProps {
@@ -47,6 +48,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
   const [loadingDelete, setLoadingDelete] = useSetState<boolean>(false);
   const dark = colorScheme === 'dark';
   const singlePost = !selectPost;
+  const router = useRouter();
 
   const handleDelete = async () => {
     setLoadingDelete(true);
@@ -166,7 +168,10 @@ const SinglePost: React.FC<SinglePostProps> = ({
                 loading={loadingDelete}
                 leftIcon={<IconTrash />}
                 variant="subtle"
-                onClick={handleDelete}
+                onClick={() => {
+                  handleDelete();
+                  singlePost && router.back();
+                }}
               >
                 Delete
               </Button>

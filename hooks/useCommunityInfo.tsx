@@ -1,20 +1,23 @@
+import { collection, doc, getDoc, getDocs, increment, writeBatch } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection, doc, getDocs, increment, writeBatch } from 'firebase/firestore';
+import { auth, db } from '../firebase/firebaseConfig';
+import { useAppDispatch, useAppSelector } from '../redux/hooks/hooks';
+import { setAuthModalOpen, setAuthModalView } from '../redux/slices/authModalSlice';
 import {
   CommunityProps,
   UserCommunityInfoProps,
+  addCurrentCommunity,
   appendCommunityInfo,
   removeCommunityInfo,
   setUserCommunities,
 } from '../redux/slices/communitySlice';
-import { useAppDispatch, useAppSelector } from '../redux/hooks/hooks';
-import { auth, db } from '../firebase/firebaseConfig';
-import { setAuthModalOpen, setAuthModalView } from '../redux/slices/authModalSlice';
 
 const useCommunityInfo = () => {
   const [user] = useAuthState(auth);
-  const { userCommunityInfo } = useAppSelector((state) => state.community);
+  const router = useRouter();
+  const { userCommunityInfo, currentCommunity } = useAppSelector((state) => state.community);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [firebaseError, setFirebaseError] = useState('');
@@ -78,14 +81,37 @@ const useCommunityInfo = () => {
     setLoading(false);
   };
 
+  const getSelectedCommunityInfo = async (communityId: string) => {
+    try {
+      const communityDocRef = doc(db, 'communities', communityId);
+      const communityDoc = await getDoc(communityDocRef);
+      const communityData = {
+        id: communityDoc.id,
+        ...communityDoc.data(),
+      };
+      dispatch(addCurrentCommunity(communityData as CommunityProps));
+      console.log(communityId);
+    } catch (error: any) {
+      console.log('Firebase error getting single community data', error.message);
+    }
+  };
+
   useEffect(() => {
     if (user && !userCommunityInfo.length) {
       getUserCommunityInfo();
     }
   }, [user]);
 
+  useEffect(() => {
+    const { communityId } = router.query;
+    if (communityId && !currentCommunity) {
+      getSelectedCommunityInfo(communityId as string);
+    }
+  }, [currentCommunity, router.query]);
+
   return {
     loading,
+    currentCommunity,
     handleCommunityJoinLeave,
   };
 };

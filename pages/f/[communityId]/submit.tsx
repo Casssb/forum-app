@@ -1,16 +1,16 @@
 import { Box, Container, Divider, Title } from '@mantine/core';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import About from '../../../components/Community/About';
 import NewPost from '../../../components/NewPost/NewPost';
 import { auth } from '../../../firebase/firebaseConfig';
-import { useAppSelector } from '../../../redux/hooks/hooks';
-import About from '../../../components/Community/About';
+import useCommunityInfo from '../../../hooks/useCommunityInfo';
 
 type submitProps = {};
 
 const submit: React.FC<submitProps> = () => {
   const [user] = useAuthState(auth);
-  const { currentCommunity } = useAppSelector((state) => state.community);
+  const { currentCommunity } = useCommunityInfo();
   return (
     <Container size="xl" sx={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
       <Box sx={{ flex: '3' }}>

@@ -1,18 +1,49 @@
 import { Box, Container } from '@mantine/core';
-import React from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import About from '../../../../components/Community/About';
 import SinglePost from '../../../../components/Posts/SinglePost';
-import { auth } from '../../../../firebase/firebaseConfig';
+import { auth, db } from '../../../../firebase/firebaseConfig';
+import useCommunityInfo from '../../../../hooks/useCommunityInfo';
 import usePosts from '../../../../hooks/usePosts';
+import { useAppDispatch } from '../../../../redux/hooks/hooks';
+import { Post, setSelectedPost } from '../../../../redux/slices/postsSlice';
+import Comments from '../../../../components/Posts/Comments';
 
 const PostPage: React.FC = () => {
   const { posts, postVotes, selectedPost, deletePost, handleVote } = usePosts();
+  const { currentCommunity } = useCommunityInfo();
   const [user] = useAuthState(auth);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const fetchPost = async (postId: string) => {
+    try {
+      const postDocRef = doc(db, 'posts', postId);
+      const postDoc = await getDoc(postDocRef);
+      const selectedPostData = {
+        id: postDoc.id,
+        ...postDoc.data(),
+      };
+      dispatch(setSelectedPost(selectedPostData as Post));
+    } catch (error: any) {
+      console.log('Firebase error getting single post', error.message);
+    }
+  };
+
+  useEffect(() => {
+    const { postId } = router.query;
+    if (postId && !selectedPost) {
+      fetchPost(postId as string);
+    }
+  }, [router.query, selectedPost]);
+
   return (
     <Box>
       <Container size="xl" sx={{ display: 'flex', gap: '1rem' }}>
-        <Box sx={{ flex: '3' }}>
+        <Box sx={{ flex: '3', height: 'max-content' }}>
           {selectedPost && (
             <SinglePost
               post={selectedPost}
@@ -22,9 +53,12 @@ const PostPage: React.FC = () => {
               handleVote={handleVote}
             />
           )}
+          {selectedPost && (
+            <Comments selectedPost={selectedPost} communityId={currentCommunity?.id} user={user} />
+          )}
         </Box>
-        <Box sx={{ border: '2px solid green', flex: '1' }}>
-          {/* <About /> */}
+        <Box sx={{ flex: '1' }}>
+          {currentCommunity && <About currentCommunity={currentCommunity} />}
         </Box>
       </Container>
     </Box>
