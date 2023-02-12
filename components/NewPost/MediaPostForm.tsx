@@ -44,7 +44,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
   const handleSubmitMediaPost = async (values: MediaFormProps) => {
     const newPost: Post = {
       creator: user.uid,
-      creatorDisplayName: user.email!.split('@')[0],
+      creatorDisplayName: user.displayName ? user.displayName : user.email!.split('@')[0],
       communityId: communityId as string,
       title: values.title,
       totalComments: 0,

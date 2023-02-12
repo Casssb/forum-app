@@ -100,6 +100,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
         <Group position="right" mt="md">
           <Button
+            variant="outline"
             loading={loading}
             type="submit"
             disabled={form.values.comment.length === 0}

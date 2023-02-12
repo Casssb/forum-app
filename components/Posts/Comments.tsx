@@ -1,4 +1,4 @@
-import { Box, Card, Text, useMantineColorScheme } from '@mantine/core';
+import { Box, Card, Skeleton, Text, useMantineColorScheme } from '@mantine/core';
 import { User } from 'firebase/auth';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -17,10 +17,10 @@ const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) 
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
   const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingComments, setLoadingComments] = useState(false);
 
   const getComments = async () => {
-    setLoading(true);
+    setLoadingComments(true);
     try {
       const commentsQuery = query(
         collection(db, 'comments'),
@@ -36,12 +36,12 @@ const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) 
     } catch (error: any) {
       console.log('Firebase error getting comments', error.message);
     }
-    setLoading(false);
+    setLoadingComments(false);
   };
 
   useEffect(() => {
-    getComments();
-  }, []);
+    selectedPost && getComments();
+  }, [selectedPost]);
 
   return (
     <Box
@@ -80,9 +80,36 @@ const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) 
           communityId={communityId}
           setComments={setComments}
         />
-        {comments.map((comment) => (
-          <SingleComment comment={comment} key={comment.id} userId={user?.uid} />
-        ))}
+        {loadingComments ? (
+          <>
+            {[0, 1, 2].map((elem) => (
+              <Box sx={{ padding: '0.8rem', width: '100%' }} key={elem}>
+                <Skeleton height={40} circle mb="xl" />
+                <Skeleton height={8} radius="xl" />
+                <Skeleton height={8} mt={6} radius="xl" />
+                <Skeleton height={8} mt={6} width="70%" radius="xl" />
+              </Box>
+            ))}
+          </>
+        ) : (
+          <>
+            {comments.length ? (
+              <>
+                {comments.map((comment) => (
+                  <SingleComment
+                    comment={comment}
+                    key={comment.id}
+                    user={user}
+                    selectedPost={selectedPost}
+                    setComments={setComments}
+                  />
+                ))}
+              </>
+            ) : (
+              <Text>No comments yet</Text>
+            )}
+          </>
+        )}
       </Card>
     </Box>
   );

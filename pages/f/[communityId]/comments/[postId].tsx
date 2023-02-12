@@ -43,7 +43,7 @@ const PostPage: React.FC = () => {
 
   return (
     <Box>
-      <Container size="xl" sx={{ display: 'flex', gap: '1rem' }}>
+      <Container size="xl" sx={{ display: 'flex', gap: '1rem', marginTop: '0.8rem' }}>
         <Box sx={{ flex: '3', height: 'max-content' }}>
           {selectedPost && (
             <SinglePost
