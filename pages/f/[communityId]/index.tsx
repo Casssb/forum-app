@@ -29,7 +29,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
 
   useEffect(() => {
     dispatch(addCurrentCommunity(communityInfo));
-  }, []);
+  }, [communityInfo]);
   return (
     <>
       {isLarge ? (

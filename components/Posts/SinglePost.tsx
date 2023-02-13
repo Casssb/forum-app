@@ -154,7 +154,11 @@ const SinglePost: React.FC<SinglePostProps> = ({
             </Text>
           )}
           <Flex mt="0.4rem">
-            <Button leftIcon={<IconMessageCircle2 />} variant="subtle">
+            <Button
+              leftIcon={<IconMessageCircle2 />}
+              variant="subtle"
+              onClick={() => selectPost && selectPost(post)}
+            >
               {post.totalComments}
             </Button>
             <Button leftIcon={<IconShare />} variant="subtle">

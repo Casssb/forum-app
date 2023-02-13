@@ -27,6 +27,8 @@ const useCommunityInfo = () => {
       const batch = writeBatch(db);
       const newCommunityInfo: UserCommunityInfoProps = {
         communityId: communityInfo.id,
+        imageURL: communityInfo.imageURL || '',
+        isAdmin: user?.uid === communityInfo.creator,
       };
       batch.set(doc(db, `users/${user?.uid}/communityInfo`, communityInfo.id), newCommunityInfo);
       batch.update(doc(db, 'communities', communityInfo.id), {
@@ -111,6 +113,7 @@ const useCommunityInfo = () => {
 
   return {
     loading,
+    userCommunityInfo,
     currentCommunity,
     handleCommunityJoinLeave,
   };

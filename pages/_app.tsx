@@ -1,15 +1,17 @@
-import { useState } from 'react';
-import NextApp, { AppProps, AppContext } from 'next/app';
-import { getCookie, setCookie } from 'cookies-next';
-import Head from 'next/head';
-import { MantineProvider, ColorScheme, ColorSchemeProvider } from '@mantine/core';
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { getCookie, setCookie } from 'cookies-next';
+import NextApp, { AppContext, AppProps } from 'next/app';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { Provider } from 'react-redux';
 import MainLayout from '../components/Layouts/MainLayout';
 import { store } from '../redux/store';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
+  const router = useRouter();
   const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
 
   const toggleColorScheme = (value?: ColorScheme) => {
@@ -31,7 +33,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
             <NotificationsProvider>
               <MainLayout>
-                <Component {...pageProps} />
+                <Component {...pageProps} key={router.asPath} />
               </MainLayout>
             </NotificationsProvider>
           </MantineProvider>

@@ -1,12 +1,13 @@
 import { Box, Button, Checkbox, Group, Radio, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React, { useState } from 'react';
-import { IconUser, IconEyeOff, IconLock } from '@tabler/icons-react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { IconEyeOff, IconLock, IconUser } from '@tabler/icons-react';
 import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, db } from '../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
-import { auth, db } from '../../firebase/firebaseConfig';
 
 interface CommunityFormProps {
   name: string;
@@ -19,6 +20,7 @@ const NewCommunityForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       name: '',
@@ -64,6 +66,8 @@ const NewCommunityForm: React.FC = () => {
       console.log('error creating a new community', error);
     }
     setLoading(false);
+    dispatch(setCommunityModalOpen(false));
+    router.push(`/f/${name}`);
   };
 
   return (

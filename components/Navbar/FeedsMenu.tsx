@@ -1,27 +1,27 @@
-import { ActionIcon, Button, Menu, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, Button, Menu, Text, useMantineColorScheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import {
-  IconHome2,
-  IconLayoutDashboard,
-  IconMessageCircle,
-  IconPlus,
-  IconTrendingUp,
-} from '@tabler/icons-react';
+import { IconHome2, IconLayoutDashboard, IconPlus, IconTrendingUp } from '@tabler/icons-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebaseConfig';
+import useCommunityInfo from '../../hooks/useCommunityInfo';
+import fredditLogoGray from '../../public/freddit-grayscale.png';
 import { useAppDispatch } from '../../redux/hooks/hooks';
 import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
 import NewCommunityModal from '../NewCommunityModal/NewCommunityModal';
-import { auth } from '../../firebase/firebaseConfig';
 
 type FeedsMenuProps = {};
 
 const FeedsMenu: React.FC<FeedsMenuProps> = () => {
+  const { userCommunityInfo } = useCommunityInfo();
   const { colorScheme } = useMantineColorScheme();
   const [user] = useAuthState(auth);
   const dark = colorScheme === 'dark';
   const isMobile = useMediaQuery('(max-width: 700px)');
   const dispatch = useAppDispatch();
+  console.log(userCommunityInfo);
 
   return (
     <Menu shadow="md" width={200}>
@@ -47,13 +47,36 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
             >
               Create Community
             </Menu.Item>
-            <Menu.Item icon={<IconMessageCircle size={14} />}>Community Placeholder</Menu.Item>
+            {userCommunityInfo.map((community) => (
+              <Menu.Item
+                key={community.communityId}
+                component={Link}
+                href={`/f/${community.communityId}`}
+                icon={
+                  <Image
+                    src={community.imageURL ? community.imageURL : fredditLogoGray}
+                    alt="community badge"
+                    height={15}
+                    width={15}
+                  />
+                }
+              >
+                {`f/${community.communityId}`}
+                {community.isAdmin && (
+                  <Text pl="0.6rem" span variant="gradient">
+                    Admin
+                  </Text>
+                )}
+              </Menu.Item>
+            ))}
             <Menu.Divider />
           </>
         )}
 
         <Menu.Label>Feeds</Menu.Label>
-        <Menu.Item icon={<IconHome2 size={14} />}>Home</Menu.Item>
+        <Menu.Item icon={<IconHome2 size={14} />} component={Link} href="/">
+          Home
+        </Menu.Item>
         <Menu.Item icon={<IconTrendingUp size={14} />}>Popular</Menu.Item>
       </Menu.Dropdown>
       <NewCommunityModal />
