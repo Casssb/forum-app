@@ -32,8 +32,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
             <NotificationsProvider>
-              <MainLayout>
-                <Component {...pageProps} key={router.asPath} />
+              <MainLayout key={router.asPath}>
+                <Component key={router.asPath} {...pageProps} />
               </MainLayout>
             </NotificationsProvider>
           </MantineProvider>

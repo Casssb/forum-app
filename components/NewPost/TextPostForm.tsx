@@ -12,6 +12,7 @@ interface TextPostFormProps {
   setLoading: Function;
   user: User;
   communityId: string | undefined;
+  communityImageURL?: string;
 }
 
 interface TextFormProps {
@@ -19,7 +20,13 @@ interface TextFormProps {
   body: string;
 }
 
-const TextPostForm: React.FC<TextPostFormProps> = ({ loading, setLoading, user, communityId }) => {
+const TextPostForm: React.FC<TextPostFormProps> = ({
+  loading,
+  setLoading,
+  user,
+  communityId,
+  communityImageURL,
+}) => {
   const router = useRouter();
   const form = useForm({
     initialValues: {
@@ -42,6 +49,7 @@ const TextPostForm: React.FC<TextPostFormProps> = ({ loading, setLoading, user, 
       totalComments: 0,
       numOfVotes: 0,
       createdAt: serverTimestamp() as Timestamp,
+      communityImageURL: communityImageURL || '',
     };
     setLoading(true);
 

@@ -2,7 +2,7 @@ import { Box, useMantineColorScheme } from '@mantine/core';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useAppSelector } from '../../redux/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks';
 import MediaPostForm from './MediaPostForm';
 import NewPostButtons from './NewPostButtons';
 import TextPostForm from './TextPostForm';
@@ -18,6 +18,7 @@ const NewPost: React.FC<NewPostProps> = ({ user }) => {
   const router = useRouter();
   const dark = colorScheme === 'dark';
   const { communityId } = router.query;
+  const { currentCommunity } = useAppSelector((state) => state.community);
 
   return (
     <Box
@@ -31,6 +32,7 @@ const NewPost: React.FC<NewPostProps> = ({ user }) => {
           user={user}
           communityId={communityId as string}
           setLoading={setLoading}
+          communityImageURL={currentCommunity?.imageURL}
         />
       )}
       {viewState === 'media' && (
@@ -39,6 +41,7 @@ const NewPost: React.FC<NewPostProps> = ({ user }) => {
           user={user}
           communityId={communityId as string}
           setLoading={setLoading}
+          communityImageURL={currentCommunity?.imageURL}
         />
       )}
     </Box>

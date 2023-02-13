@@ -21,7 +21,6 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
   const dark = colorScheme === 'dark';
   const isMobile = useMediaQuery('(max-width: 700px)');
   const dispatch = useAppDispatch();
-  console.log(userCommunityInfo);
 
   return (
     <Menu shadow="md" width={200}>

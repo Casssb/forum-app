@@ -16,6 +16,7 @@ interface MediaPostFormProps {
   setLoading: Function;
   user: User;
   communityId: string | undefined;
+  communityImageURL?: string;
 }
 
 interface MediaFormProps {
@@ -27,6 +28,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
   setLoading,
   user,
   communityId,
+  communityImageURL,
 }) => {
   const theme = useMantineTheme();
   const router = useRouter();
@@ -50,6 +52,7 @@ const MediaPostForm: React.FC<MediaPostFormProps> = ({
       totalComments: 0,
       numOfVotes: 0,
       createdAt: serverTimestamp() as Timestamp,
+      communityImageURL: communityImageURL || '',
     };
     setLoading(true);
 

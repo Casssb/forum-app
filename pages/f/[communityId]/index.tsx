@@ -23,7 +23,7 @@ interface communityPageProps {
 }
 
 const community: React.FC<communityPageProps> = ({ communityInfo }) => {
-  const isLarge = useMediaQuery('(min-width: 1000px)');
+  const isLarge = useMediaQuery('(min-width: 1200px)');
   const dispatch = useAppDispatch();
   const [user] = useAuthState(auth);
 
@@ -32,7 +32,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
   }, [communityInfo]);
   return (
     <>
-      {isLarge ? (
+      {isLarge && user ? (
         <ThreeColumnPage>
           <>
             <CommunityHeader communityInfo={communityInfo} />

@@ -25,6 +25,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Post } from '../../redux/slices/postsSlice';
+import fredditLogoGray from '../../public/freddit-grayscale.png';
+import Link from 'next/link';
 
 interface SinglePostProps {
   post: Post;
@@ -33,6 +35,7 @@ interface SinglePostProps {
   deletePost: (post: Post) => Promise<boolean>;
   handleVote: (post: Post, vote: number, communityId: string) => void;
   selectPost?: (post: Post) => void;
+  isHomePage?: boolean;
 }
 
 const SinglePost: React.FC<SinglePostProps> = ({
@@ -42,6 +45,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
   deletePost,
   handleVote,
   selectPost,
+  isHomePage,
 }) => {
   const { colorScheme } = useMantineColorScheme();
   const [postError, setPostError] = useSetState(null as any);
@@ -114,8 +118,22 @@ const SinglePost: React.FC<SinglePostProps> = ({
           <Group
             position="left"
             sx={{ height: '100%', cursor: `${singlePost ? 'auto' : 'pointer'}` }}
-            onClick={() => selectPost && selectPost(post)}
           >
+            {isHomePage && (
+              <>
+                <Image
+                  src={post.imageURL ? post.imageURL : fredditLogoGray}
+                  alt="community logo"
+                  height={20}
+                  width={20}
+                />
+                <Link href={`f/${post.communityId}`}>
+                  <Text fw={700} color="dark">
+                    f/{post.communityId}
+                  </Text>
+                </Link>
+              </>
+            )}
             <Text>
               Posted by u/{post.creatorDisplayName}{' '}
               {moment(new Date(post.createdAt.seconds * 1000)).fromNow()}
