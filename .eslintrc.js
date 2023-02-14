@@ -18,5 +18,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'arrow-body-style': 'off',
+    'no-console': 'off',
   },
 };

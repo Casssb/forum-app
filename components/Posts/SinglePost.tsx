@@ -22,11 +22,11 @@ import {
 } from '@tabler/icons-react';
 import moment from 'moment';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Post } from '../../redux/slices/postsSlice';
 import fredditLogoGray from '../../public/freddit-grayscale.png';
-import Link from 'next/link';
+import { Post } from '../../redux/slices/postsSlice';
 
 interface SinglePostProps {
   post: Post;
@@ -122,15 +122,13 @@ const SinglePost: React.FC<SinglePostProps> = ({
             {isHomePage && (
               <>
                 <Image
-                  src={post.imageURL ? post.imageURL : fredditLogoGray}
+                  src={post.communityImageURL ? post.communityImageURL : fredditLogoGray}
                   alt="community logo"
                   height={20}
                   width={20}
                 />
                 <Link href={`f/${post.communityId}`}>
-                  <Text fw={700} color="dark">
-                    f/{post.communityId}
-                  </Text>
+                  <Text fw={700}>f/{post.communityId}</Text>
                 </Link>
               </>
             )}

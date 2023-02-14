@@ -6,16 +6,20 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import PostSkeleton from '../components/Posts/PostSkeleton';
 import { auth, db } from '../firebase/firebaseConfig';
 import { useAppDispatch } from '../redux/hooks/hooks';
-import { Post, addPosts } from '../redux/slices/postsSlice';
+import { Post, PostVote, addPosts, clearPostVotes, setPostVotes } from '../redux/slices/postsSlice';
 import SinglePost from '../components/Posts/SinglePost';
 import usePosts from '../hooks/usePosts';
 import useCommunityInfo from '../hooks/useCommunityInfo';
+import FredditPremium from '../components/HomeComponents/FredditPremium';
+import HomeInfo from '../components/HomeComponents/HomeInfo';
+import TopCommunites from '../components/HomeComponents/TopCommunites';
+import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 
 export default function HomePage() {
   const isSmall = useMediaQuery('(max-width: 900px)');
   const [user, loadingUser] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
-  const { posts, postVotes, selectedPost, deletePost, handleVote, selectPost } = usePosts();
+  const { posts, postVotes, deletePost, handleVote, selectPost } = usePosts();
   const { userCommunityInfo } = useCommunityInfo();
   const dispatch = useAppDispatch();
   console.log(posts);
@@ -61,6 +65,24 @@ export default function HomePage() {
     setLoading(false);
   };
 
+  const getHomeFeedPostVotes = async () => {
+    try {
+      const postIds = posts.map((post) => post.id);
+      const postVotesQuery = query(
+        collection(db, `users/${user?.uid}/postVotes`),
+        where('postId', 'in', postIds)
+      );
+      const postVotesDocs = await getDocs(postVotesQuery);
+      const posVotes = postVotesDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch(setPostVotes(posVotes as PostVote[]));
+    } catch (error: any) {
+      console.log('Firebase error on home page getting post votes', error.message);
+    }
+  };
+
   useEffect(() => {
     if (!user && !loadingUser) {
       createNonUserPostsFeed();
@@ -69,6 +91,15 @@ export default function HomePage() {
       createUserPostsFeed();
     }
   }, [user, loadingUser]);
+
+  useEffect(() => {
+    if (user && posts.length) {
+      getHomeFeedPostVotes();
+    }
+    return () => {
+      dispatch(clearPostVotes());
+    };
+  }, [user, posts]);
 
   return (
     <Box>
@@ -91,7 +122,7 @@ export default function HomePage() {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '0.8rem',
-                  marginTop: '0.8rem',
+                  marginTop: '0.2rem',
                   height: 'max-content',
                 }}
               >
@@ -111,7 +142,20 @@ export default function HomePage() {
             )}
           </>
         </Box>
-        <Box sx={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>2</Box>
+        <Box
+          sx={{
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.8rem',
+            marginTop: '0.2rem',
+          }}
+        >
+          <FredditPremium />
+          <HomeInfo />
+          <TopCommunites />
+          <ScrollToTop />
+        </Box>
       </Container>
     </Box>
   );

@@ -17,6 +17,7 @@ import PostsFeed from '../../../components/Posts/PostsFeed';
 import { auth, db } from '../../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../../redux/hooks/hooks';
 import { CommunityProps, addCurrentCommunity } from '../../../redux/slices/communitySlice';
+import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
 
 interface communityPageProps {
   communityInfo: CommunityProps;
@@ -48,6 +49,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
             <About currentCommunity={communityInfo} />
             {user?.uid === communityInfo.creator && <Admin currentCommunity={communityInfo} />}
             <Rules />
+            <ScrollToTop />
           </>
         </ThreeColumnPage>
       ) : (
@@ -63,6 +65,7 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
             <About currentCommunity={communityInfo} />
             {user?.uid === communityInfo.creator && <Admin currentCommunity={communityInfo} />}
             <Rules />
+            <ScrollToTop />
           </>
         </TwoColumnPage>
       )}
