@@ -49,13 +49,13 @@ const SinglePost: React.FC<SinglePostProps> = ({
 }) => {
   const { colorScheme } = useMantineColorScheme();
   const [postError, setPostError] = useSetState(null as any);
-  const [loadingDelete, setLoadingDelete] = useSetState<boolean>(false);
+  const [loadingDelete, setLoadingDelete] = useSetState(false as any);
   const dark = colorScheme === 'dark';
   const singlePost = !selectPost;
   const router = useRouter();
 
   const handleDelete = async () => {
-    setLoadingDelete(true);
+    setLoadingDelete(true as any);
     try {
       const success = await deletePost(post);
       if (!success) {
@@ -64,7 +64,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
     } catch (error: any) {
       setPostError(error.message);
     }
-    setLoadingDelete(false);
+    setLoadingDelete(false as any);
   };
 
   return (
