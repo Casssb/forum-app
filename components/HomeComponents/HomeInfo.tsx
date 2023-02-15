@@ -11,10 +11,13 @@ import {
 import Image from 'next/image';
 import React from 'react';
 import frogCityWatercolour from '../../public/frog-city-watercolour2.png';
+import { useAppDispatch } from '../../redux/hooks/hooks';
+import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
 
 const HomeInfo: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
+  const dispatch = useAppDispatch();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Card bg={dark ? 'dark' : 'gray.0'} withBorder>
@@ -40,7 +43,12 @@ const HomeInfo: React.FC = () => {
           </Flex>
         </Card.Section>
         <Divider />
-        <Button variant="outline" fullWidth mt="1rem">
+        <Button
+          variant="outline"
+          fullWidth
+          mt="1rem"
+          onClick={() => dispatch(setCommunityModalOpen(true))}
+        >
           Create Community
         </Button>
       </Card>

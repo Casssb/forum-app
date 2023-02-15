@@ -28,7 +28,7 @@ const useStyles = createStyles((theme) => ({
 
 const Navbar: React.FC = () => {
   const { classes } = useStyles();
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   return (
     <Header height={56} className={classes.header}>

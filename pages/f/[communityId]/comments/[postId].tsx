@@ -12,6 +12,7 @@ import useCommunityInfo from '../../../../hooks/useCommunityInfo';
 import usePosts from '../../../../hooks/usePosts';
 import { useAppDispatch } from '../../../../redux/hooks/hooks';
 import { Post, setSelectedPost } from '../../../../redux/slices/postsSlice';
+import ScrollToTop from '../../../../components/ScrollToTop/ScrollToTop';
 
 const PostPage: React.FC = () => {
   const { postVotes, selectedPost, deletePost, handleVote } = usePosts();
@@ -62,8 +63,9 @@ const PostPage: React.FC = () => {
             />
           )}
         </Box>
-        <Box sx={{ flex: '1' }}>
+        <Box sx={{ flex: '1', gap: '0.8rem', flexDirection: 'column', display: 'flex' }}>
           {currentCommunity && <About currentCommunity={currentCommunity} />}
+          <ScrollToTop />
         </Box>
       </Container>
     </Box>

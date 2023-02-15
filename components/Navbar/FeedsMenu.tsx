@@ -76,7 +76,9 @@ const FeedsMenu: React.FC<FeedsMenuProps> = () => {
         <Menu.Item icon={<IconHome2 size={14} />} component={Link} href="/">
           Home
         </Menu.Item>
-        <Menu.Item icon={<IconTrendingUp size={14} />}>Popular</Menu.Item>
+        <Menu.Item icon={<IconTrendingUp size={14} />} component={Link} href="/">
+          Popular
+        </Menu.Item>
       </Menu.Dropdown>
       <NewCommunityModal />
     </Menu>

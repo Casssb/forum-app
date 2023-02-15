@@ -127,8 +127,10 @@ const SinglePost: React.FC<SinglePostProps> = ({
                   height={20}
                   width={20}
                 />
-                <Link href={`f/${post.communityId}`}>
-                  <Text fw={700}>f/{post.communityId}</Text>
+                <Link href={`f/${post.communityId}`} style={{ textDecoration: 'none' }}>
+                  <Text color={dark ? 'gray.2' : 'dark.9'} fw={700}>
+                    f/{post.communityId}
+                  </Text>
                 </Link>
               </>
             )}
