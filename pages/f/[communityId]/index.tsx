@@ -18,6 +18,7 @@ import { auth, db } from '../../../firebase/firebaseConfig';
 import { useAppDispatch } from '../../../redux/hooks/hooks';
 import { CommunityProps, addCurrentCommunity } from '../../../redux/slices/communitySlice';
 import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
+import PostFilter from '../../../components/PostFilter/PostFilter';
 
 interface communityPageProps {
   communityInfo: CommunityProps;
@@ -43,12 +44,13 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <CreatePost />
+            <PostFilter />
             <PostsFeed communityInfo={communityInfo} />
           </>
           <>
             <About currentCommunity={communityInfo} />
             {user?.uid === communityInfo.creator && <Admin currentCommunity={communityInfo} />}
-            <Rules />
+            <Rules communityInfo={communityInfo} />
             <ScrollToTop />
           </>
         </ThreeColumnPage>
@@ -59,12 +61,13 @@ const community: React.FC<communityPageProps> = ({ communityInfo }) => {
           </>
           <>
             <CreatePost />
+            <PostFilter />
             <PostsFeed communityInfo={communityInfo} />
           </>
           <>
             <About currentCommunity={communityInfo} />
             {user?.uid === communityInfo.creator && <Admin currentCommunity={communityInfo} />}
-            <Rules />
+            <Rules communityInfo={communityInfo} />
             <ScrollToTop />
           </>
         </TwoColumnPage>

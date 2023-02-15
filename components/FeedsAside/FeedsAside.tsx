@@ -1,10 +1,12 @@
-import { Box, Group, Menu, Text, createStyles } from '@mantine/core';
+import { Box, Group, Text, createStyles } from '@mantine/core';
+import { IconListSearch, IconPlus } from '@tabler/icons-react';
 import Image from 'next/image';
-import Link, { LinkProps } from 'next/link';
+import Link from 'next/link';
 import React from 'react';
 import useCommunityInfo from '../../hooks/useCommunityInfo';
 import fredditLogoGray from '../../public/freddit-grayscale.png';
-import { IconListSearch } from '@tabler/icons-react';
+import { useAppDispatch } from '../../redux/hooks/hooks';
+import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -41,6 +43,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const FeedsAside: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { userCommunityInfo } = useCommunityInfo();
   const { classes, cx } = useStyles();
   const items = userCommunityInfo.map((item) => (
@@ -59,6 +62,11 @@ const FeedsAside: React.FC = () => {
         style={{ marginRight: '0.4rem' }}
       />
       {`f/${item.communityId}`}
+      {item.isAdmin && (
+        <Text pl="0.6rem" span variant="gradient">
+          Admin
+        </Text>
+      )}
     </Box>
   ));
   return (
@@ -67,6 +75,20 @@ const FeedsAside: React.FC = () => {
         <IconListSearch size={18} stroke={1.5} />
         <Text>Your Communities</Text>
       </Group>
+      <Box
+        className={cx(classes.link)}
+        sx={(theme) => ({
+          paddingLeft: 1 * theme.spacing.md,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          cursor: 'pointer',
+        })}
+        onClick={() => dispatch(setCommunityModalOpen(true))}
+      >
+        <IconPlus size={17} />
+        Create Community
+      </Box>
       {items}
     </Box>
   );

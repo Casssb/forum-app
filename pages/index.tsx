@@ -14,6 +14,7 @@ import FredditPremium from '../components/HomeComponents/FredditPremium';
 import HomeInfo from '../components/HomeComponents/HomeInfo';
 import TopCommunites from '../components/HomeComponents/TopCommunites';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
+import PostFilter from '../components/PostFilter/PostFilter';
 
 export default function HomePage() {
   const isSmall = useMediaQuery('(max-width: 900px)');
@@ -22,7 +23,6 @@ export default function HomePage() {
   const { posts, postVotes, deletePost, handleVote, selectPost } = usePosts();
   const { userCommunityInfo } = useCommunityInfo();
   const dispatch = useAppDispatch();
-  console.log(posts);
 
   const createNonUserPostsFeed = async () => {
     try {
@@ -112,7 +112,8 @@ export default function HomePage() {
           marginTop: '0.8rem',
         }}
       >
-        <Box sx={{ flex: '3' }}>
+        <Box sx={{ flex: '3', marginTop: '0.2rem' }}>
+          <PostFilter />
           <>
             {loading ? (
               <PostSkeleton />
@@ -122,7 +123,7 @@ export default function HomePage() {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '0.8rem',
-                  marginTop: '0.2rem',
+                  marginTop: '0.8rem',
                   height: 'max-content',
                 }}
               >

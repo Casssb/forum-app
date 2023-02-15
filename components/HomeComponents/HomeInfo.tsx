@@ -10,12 +10,16 @@ import {
 } from '@mantine/core';
 import Image from 'next/image';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebaseConfig';
 import frogCityWatercolour from '../../public/frog-city-watercolour2.png';
 import { useAppDispatch } from '../../redux/hooks/hooks';
+import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
 import { setCommunityModalOpen } from '../../redux/slices/communityModalSlice';
 
 const HomeInfo: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
+  const [user] = useAuthState(auth);
   const dark = colorScheme === 'dark';
   const dispatch = useAppDispatch();
   return (
@@ -47,7 +51,14 @@ const HomeInfo: React.FC = () => {
           variant="outline"
           fullWidth
           mt="1rem"
-          onClick={() => dispatch(setCommunityModalOpen(true))}
+          onClick={() => {
+            if (user) {
+              dispatch(setCommunityModalOpen(true));
+            } else {
+              dispatch(setAuthModalOpen(true));
+              dispatch(setAuthModalView('existing'));
+            }
+          }}
         >
           Create Community
         </Button>

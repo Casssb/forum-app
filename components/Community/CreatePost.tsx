@@ -33,6 +33,7 @@ const CreatePost: React.FC = () => {
         justifyContent: 'space-evenly',
         alignItems: 'center',
         gap: '0.6rem',
+        marginBottom: '0.8rem',
       }}
       bg={dark ? 'dark' : 'gray.0'}
       p="sm"

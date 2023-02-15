@@ -48,6 +48,11 @@ const About: React.FC<AboutProps> = ({ currentCommunity }) => {
                 {moment(new Date(currentCommunity.createdAt.seconds * 1000)).format('MMM DD, YYYY')}
               </Text>
             )}
+            {currentCommunity.nsfw && (
+              <Text span variant="gradient" fw={700} gradient={{ from: 'red', to: 'grape', deg: 45 }}>
+                18+
+              </Text>
+            )}
           </Flex>
         </Card.Section>
         <Divider />
