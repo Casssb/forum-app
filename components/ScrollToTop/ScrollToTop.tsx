@@ -11,7 +11,8 @@ const ScrollToTop: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 'auto',
+        position: 'sticky',
+        top: '93%',
         paddingBottom: '1rem',
       }}
     >
