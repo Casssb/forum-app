@@ -4,7 +4,7 @@ A social forum app with the basic features of Reddit. Built with Typescript, Nex
 
 [Demo here](https://forum-app-hazel.vercel.app/)
 
-![Image of live version](./public/mainPage.png)
+![Image of live version](./public/home-page.png)
 
 ### Installing and running locally
 
