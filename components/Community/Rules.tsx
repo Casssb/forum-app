@@ -29,7 +29,7 @@ const Rules: React.FC<RulesProps> = ({ communityInfo }) => {
         <Title order={5}>{`f/${communityInfo.id} Rules`}</Title>
         <Accordion defaultValue="rules">
           {rules.map((rule) => (
-            <Accordion.Item value={rule.title}>
+            <Accordion.Item value={rule.title} key={rule.title}>
               <Accordion.Control>{rule.title}</Accordion.Control>
               <Accordion.Panel>{rule.body}</Accordion.Panel>
             </Accordion.Item>

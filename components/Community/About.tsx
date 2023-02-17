@@ -14,7 +14,11 @@ import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebaseConfig';
 import frogBG from '../../public/frog-city-watercolour3.png';
+import { useAppDispatch } from '../../redux/hooks/hooks';
+import { setAuthModalOpen, setAuthModalView } from '../../redux/slices/authModalSlice';
 import { CommunityProps } from '../../redux/slices/communitySlice';
 
 interface AboutProps {
@@ -22,6 +26,8 @@ interface AboutProps {
 }
 
 const About: React.FC<AboutProps> = ({ currentCommunity }) => {
+  const [user] = useAuthState(auth);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
@@ -49,7 +55,12 @@ const About: React.FC<AboutProps> = ({ currentCommunity }) => {
               </Text>
             )}
             {currentCommunity.nsfw && (
-              <Text span variant="gradient" fw={700} gradient={{ from: 'red', to: 'grape', deg: 45 }}>
+              <Text
+                span
+                variant="gradient"
+                fw={700}
+                gradient={{ from: 'red', to: 'grape', deg: 45 }}
+              >
                 18+
               </Text>
             )}
@@ -71,7 +82,14 @@ const About: React.FC<AboutProps> = ({ currentCommunity }) => {
           variant="outline"
           fullWidth
           mt="1rem"
-          onClick={() => router.push(`/f/${currentCommunity.id}/submit`)}
+          onClick={() => {
+            if (!user) {
+              dispatch(setAuthModalOpen(true));
+              dispatch(setAuthModalView('existing'));
+              return;
+            }
+            router.push(`/f/${currentCommunity.id}/submit`);
+          }}
         >
           Create Post
         </Button>

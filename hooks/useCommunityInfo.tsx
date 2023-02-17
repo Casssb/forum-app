@@ -92,7 +92,6 @@ const useCommunityInfo = () => {
         ...communityDoc.data(),
       };
       dispatch(addCurrentCommunity(communityData as CommunityProps));
-      console.log(communityId);
     } catch (error: any) {
       console.log('Firebase error getting single community data', error.message);
     }

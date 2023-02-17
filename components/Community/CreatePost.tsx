@@ -21,10 +21,11 @@ const CreatePost: React.FC = () => {
     if (!user) {
       dispatch(setAuthModalOpen(true));
       dispatch(setAuthModalView('existing'));
-      return;
+    } else {
+      console.log(user);
+      const { communityId } = router.query;
+      router.push(`/f/${communityId}/submit`);
     }
-    const { communityId } = router.query;
-    router.push(`/f/${communityId}/submit`);
   };
   return (
     <Paper
